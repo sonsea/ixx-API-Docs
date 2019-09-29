@@ -33,7 +33,7 @@ nonce = int(time.time())
 payload = {'nonce': nonce, 'symbol': symbol, 'page': 1, 'size': 10}
 payload_str = parse.urlencode(payload)
 sign = hashlib.sha256((payload_str+secret).encode("utf-8")).hexdigest()
-headers = {'Content-Type': 'application/json', 'version': '2.0', 'key': key, 'sign': sign}
+headers = {'Content-Type': 'application/json', 'from': 'ixx',''version': '2.0', 'key': key, 'sign': sign}
 response = requests.post(url, data=json.dumps(payload), headers=headers)
 ```
 
@@ -47,7 +47,7 @@ $nonce = time();
 $payload = ['nonce' => $nonce, 'symbol' => $symbol, 'page' => 1, 'size' => 10];
 $payload_str = http_build_query($payload, '', '&');
 $sign = hash('sha256', urldecode($payload_str).$secret);
-$headers = ['Content-Type:application/json','version:2.0', 'key:'.$key, 'sign:' .$sign ];
+$headers = ['Content-Type:application/json','from': 'ixx','version:2.0', 'key:'.$key, 'sign:' .$sign ];
 $response = Requests::post($url, $headers, json_encode($payload));
 ```
 
@@ -69,6 +69,7 @@ $.ajax({
     size: 10
   },
   headers: {
+    from: 'ixx'
     version: '2.0',
     key: key,
     sign: sign
