@@ -1,4 +1,4 @@
-# 交易API
+# 币本位交易API
 
 * [概述](#open-api)
 
@@ -9,6 +9,18 @@
 * [代码示例](#open-apicode)
 
 * [状态码](#open-apistatuscode)
+
+* [币本位API列表](#open-apiunitlist)
+  * [获取交易对列表](#open-apiunitlist-unitsymbollist)
+  * [用户余额(持仓)](#open-apiunitlist-unitaccountbalancelist)
+  * [修改保证金](#open-apiunitlist-unitaccounttransfermargin)
+  * [下单](#open-apiunitlist-unitorder)
+  * [撤单](#open-apiunitlist-unitremove)
+  * [一键撤单](#open-apiunitlist-unitremoveall)
+  * [平仓](#open-apiunitlist-unitclose)
+  * [当前委托](#open-apiunitlist-unitactiveorders)
+  * [委托历史](#open-apiunitlist-unitorderhistory)
+  * [已成交](#open-apiunitlist-unitaccountorderfills)
 
 -----------
 
@@ -149,7 +161,9 @@ $.ajax({
 |30002	|	下单数量不合法|    
 |30003	|	下单金额不合法| 
 
-### 获取交易对列表 POST /unit/symbol/list
+## <span id="open-apiunitlist">币本位API列表 </span>
+
+### <span id="open-apiunitlist-unitsymbollist">获取交易对列表 POST /unit/symbol/list</span>
 - 参数
  - site 站点 1:ix,2:ixx
 - 返回值
@@ -184,7 +198,7 @@ $.ajax({
 	-	1000毫秒
 
 	
-### 用户余额(持仓) POST /unit/account/balance/list
+### <span id="open-apiunitlist-unitaccountbalancelist">用户余额(持仓) POST /unit/account/balance/list</span>
 - 参数
   - user_id 用户id
 - 返回值
@@ -218,7 +232,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	1000毫秒
 	
-### 修改保证金 POST /unit/account/transfer_margin
+### <span id="open-apiunitlist-unitaccounttransfermargin">修改保证金 POST /unit/account/transfer_margin</span>
 - 参数
   - user_id 用户id
   - name 合约名(EHTUSD,EOSUSD)
@@ -232,7 +246,7 @@ $.ajax({
 	-	1000毫秒
 
 ## 订单相关
-### 下单 POST /unit/order
+### <span id="open-apiunitlist-unitorder">下单 POST /unit/order</span>
 - 参数
   - user_id
   - name 合约名(EHTUSD,EOSUSD)
@@ -258,7 +272,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	1000毫秒
 
-### 撤单 POST /unit/remove
+### <span id="open-apiunitlist-unitremove">撤单 POST /unit/remove</span>
 - 参数
   - user_id
   - name 合约名(EHTUSD,EOSUSD) 
@@ -271,7 +285,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	100毫秒
 
-### 一键撤单 POST /unit/remove_all
+### <span id="open-apiunitlist-unitremoveall">一键撤单 POST /unit/remove_all</span>
 - 参数
   - user_id
   - trigger 0活动委托 1止损委托
@@ -283,7 +297,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	5000毫秒
 
-### 平仓 POST /unit/close
+### <span id="open-apiunitlist-unitclose">平仓 POST /unit/close</span>
 - 参数
   - user_id
   - name 合约名(EHTUSD,EOSUSD)
@@ -296,7 +310,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	1000毫秒
 
-### 当前委托 POST /unit/activeorders
+### <span id="open-apiunitlist-unitactiveorders">当前委托 POST /unit/activeorders</span>
 - 参数
   - user_id
   - page
@@ -322,7 +336,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	1000毫秒
 
-### 委托历史 POST /unit/orderhistory
+### <span id="open-apiunitlist-unitorderhistory">委托历史 POST /unit/orderhistory</span>
 - 参数
   - user_id
   - name 合约名(EHTUSD,EOSUSD)（非必传）默认全部
@@ -345,7 +359,7 @@ $.ajax({
 - 限定访问间隔时间
 	-	1000毫秒
 
-### 已成交 POST /unit/account/orderfills
+### <span id="open-apiunitlist-unitaccountorderfills">已成交 POST /unit/account/orderfills</span>
 - 参数
   - user_id
   - page

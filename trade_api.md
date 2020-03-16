@@ -1,6 +1,27 @@
-# 交易API
+# 币币交易API
 
-## 概述
+* [概述](#open-api)
+
+* [频率控制](#open-apilimited)
+
+* [开启API权限](#open-apisecret)
+
+* [代码示例](#open-apicode)
+
+* [状态码](#open-apistatuscode)
+
+* [币币交易API列表](#open-apitradelist)
+  * [获取所有交易对的详情](#open-apitradelist-symbollist)
+  * [获取余额列表](#open-apitradelist-balancelist)
+  * [下单](#open-apitradelist-ordercreate)
+  * [撤单](#open-apitradelist-orderremove)
+  * [查询委托](#open-apitradelist-orderactive)
+  * [历史订单](#open-apitradelist-orderhistory)
+  * [查询活跃委托订单详情](#open-apitradelist-orderquery)
+
+-----------
+
+## <span id="open-api">概述 </span>
 
 - 所有交易API请求都使用HTTP POST
 - 交易API需要在官网申请API需要的key/secret
@@ -10,13 +31,72 @@
 - 请求的nonce参数为当前系统时间戳，单位为秒，nonce不早/晚于当前系统时间10秒
 - 单个接口访问频率最快为100ms间隔
 
-## 开启API权限
+## <span id="open-apisecret">频率控制 </span>  
+我们对API的请求频率进行控制，具体频率参数请参考接口详情
 
+对 API 的请求，以下标头将被返回︰
+```
+"X-ratelimit-limit: 1000"
+"X-ratelimit-next: 500"
+```
+X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而参数不同
+如果你已经被频率限制，你将收到 403 响应, 以及一个额外的标头X-ratelimit-next, 它意味着你在重试前需要等待的时间
+ 
+
+
+
+## <span id="open-apisecret">开启API权限 </span>
+
+### 申请API Key
 用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
+官网地址: www.ix.com
+备用地址: www.ixex.io
 
 **_注意： 请勿向任何人泄露这两个参数，这两个参数关乎您账号的安全。_**    
 
-## 代码示例
+### 请求认证
+在调用 API 时，需要提供 API Key 作为每个请求的身份识别，并且通过secret对请求数据加签
+
+#### 公共参数
+
+字段名 | 字段释义 | 字段类型 | 是否必填 | 默认值 | 参数类型 | 说明
+ :-: | :-: | :-: | :-: | :-: | :-: | :-: 
+key | 在平台申请的API_KEY |  string | 是 | 无 | http header | 用于身份识别
+sign | 签名信息 |  string | 是 | 无 |  http header |按照一定规则形成的签名信息
+version| api版本| string | 是 | 2.0 | http header | 用于区分api版本
+nonce | 请求发起时的时间戳,单位:秒 | string | 是 | 无 |  http body | nonce不早/晚于当前系统时间10秒
+
+
+ #### 如何进行签名
+ 1. 将对应业务的接口参数和除sign外的公共参数以http GET请求形式拼接, 如下
+ 
+ ``` php
+$post_data = 'leverage=100&symbol=BTCUSD&nonce=1542434791';
+
+ ```
+ 
+ 2. 对拼接后的字符串进行加签
+ ``` php
+$secret = 't7T0YlFnYXk0Fx3JswQsDrViLg1Gh3DUU5Mr';
+$sign = hash('sha256', $post_data.$secret)
+ // sign = 670e3e4aa32b243f2dedf1dafcec2fd17a440e71b05681550416507de591d908
+ ```
+ 
+ 3.header附加上key和sign参数，发送http请求
+ 
+ ```http
+ POST /order/active HTTP/1.1
+ Content-Type: application/x-www-form-urlencoded
+ key: 43f2dedf1dafcec2fd17a440e71b056815
+ sign: 670e3e4aa32b243f2dedf1dafcec2fd17a440e71b05681550416507de591d908
+ version: 2.0 
+ 
+leverage=100&symbol=BTCUSD&nonce=1542434791
+ 
+ ```
+
+
+## <span id="open-apicode">代码示例 </span> 
 Python：
 ``` Python
 import requests
@@ -78,7 +158,7 @@ $.ajax({
 ```
 
 
-## 状态码
+## <span id="open-apistatuscode">状态码 </span>
 
 | 错误代码        | 详细描述    |    
 | :-----    | :-----   |    
@@ -96,9 +176,9 @@ $.ajax({
 |60047	|	当日下单次数过多|
 |60048	|	获取当前价格失败|
 
-## API列表
+## <span id="open-apitradelist">币币交易API列表 </span>
 
-## 获取所有交易对的详情 POST /symbol/list
+## <span id="open-apitradelist-symbollist">获取所有交易对的详情 POST /symbol/list</span>
 - 参数
   - nonce 时间戳
 - 返回值
@@ -124,7 +204,7 @@ $.ajax({
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/symbol/list -d 'nonce=1536826456'
 ```
 
-## 获取余额列表 POST /balance/list
+## <span id="open-apitradelist-balancelist">获取余额列表 POST /balance/list</span>
 - 参数
   - nonce 时间戳
 - 返回值
@@ -145,7 +225,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/balance/list -d 'nonce=1536826456'
 ```
 
-## 下单 POST /order/create
+## <span id="open-apitradelist-ordercreate">下单 POST /order/create</span>
 - 参数
   - nonce 时间戳
   - symbol 交易对名称
@@ -172,7 +252,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/create -d 'nonce=1536826456&symbol=BTC_USDT&side=1&type=1&price=6000&amount=1'
 ```
 
-## 撤单 POST /order/remove
+## <span id="open-apitradelist-orderremove">撤单 POST /order/remove</span>
 - 参数
   - nonce 时间戳
   - symbol 交易对名称
@@ -186,7 +266,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/remove -d 'nonce=1536826456&symbol=BTC_USDT&order_id=123'
 ```
 
-## 查询委托 POST /order/active
+## <span id="open-apitradelist-orderactive">查询委托 POST /order/active</span>
 - 参数
   - nonce 时间戳
   - symbol 交易对名称
@@ -218,7 +298,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/active -d 'nonce=1536826456&symbol=BTC_USDT&page=1&size=10'
 ```
 
-## 历史订单 POST /order/history
+## <span id="open-apitradelist-orderhistory">历史订单 POST /order/history</span>
 - 参数
   - nonce 时间戳
   - page 页码
@@ -249,7 +329,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/history -d 'nonce=1536826456&page=1&size=10'
 ```
 
-### 查询活跃委托订单详情 POST /order/query
+### <span id="open-apitradelist-orderquery">查询活跃委托订单详情 POST /order/query</span>
 - 参数
   - nonce 时间戳
   - symbol 交易对名称
