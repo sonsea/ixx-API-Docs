@@ -32,13 +32,13 @@ Main domain name: api.ix.com  Standby domain name: api.ixex.io
 ## QUOTATION AND HANDICAP API
 
 #### REST API
-[quotes_rest_api.md](./quotes_rest_api.md)
+[quotes_rest_api_en.md](./quotes_rest_api.md)
 <p>
 Main domain name: q.ix.com Standby domain name: q.ixex.io
 </p>
 
 #### WebSocket API
-[quotes_websocket_api.md](./quotes_websocket_api.md)
+[quotes_websocket_api_en.md](./quotes_websocket_api.md)
 <p>
 Main domain name: ws.ix.com   Standby domain name: ws.ixex.io
 </p>
