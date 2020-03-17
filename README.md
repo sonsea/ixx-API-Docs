@@ -1,4 +1,4 @@
-[English](./README_EN.md)
+### [English](./README_EN.md)
 
 ## API概述
 IX API为用户提供了一套简单而强大的开发工具，帮助用户将交易和行情功能整合到自己的应用中。
@@ -11,6 +11,18 @@ IX API为用户提供了一套简单而强大的开发工具，帮助用户将�
 
 ## 合约交易API
 [future_api.md](./future_api.md)
+<p>
+主域名: api.ix.com 备用域名: api.ixex.io
+</p>
+
+## 币本位交易API
+[unit_api.md](./unit_api.md)
+<p>
+主域名: api.ix.com 备用域名: api.ixex.io
+</p>
+
+## 金本位交易API
+[mix_api.md](./mix_api.md)
 <p>
 主域名: api.ix.com 备用域名: api.ixex.io
 </p>
