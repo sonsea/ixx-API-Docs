@@ -9,6 +9,8 @@
 
 示例如下：
 ``` javascript
+### [中文](./quotes_rest_api.md)
+
 {
     "code":0,   // 状态码，正确响应时为0
     "data":{

@@ -182,7 +182,7 @@ $.ajax({
 
 ### <span id="open-apifuturelist-symbollist">获取交易对列表 POST /contract/symbol/list </span>
 - 参数
-  - nonce 时间戳
+  - nonce Timestamps
 - 返回值
   - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
   - data
@@ -211,7 +211,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 
 ### <span id="open-apifuturelist-accountbalance">用户余额(持仓) POST /future/account/balance/list </span>
 - 参数
-  - nonce 时间戳
+  - nonce Timestamps
 - 返回值
   - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
   - data
