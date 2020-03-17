@@ -1,16 +1,18 @@
-# 币币交易API
+### [中文](./trade_api.md)
 
-* [概述](#open-api)
+# Spot Trading API
 
-* [频率控制](#open-apilimited)
+* [API Summary](#open-api)
 
-* [开启API权限](#open-apisecret)
+* [Limited Control](#open-apilimited)
 
-* [代码示例](#open-apicode)
+* [Create API Key](#open-apisecret)
 
-* [状态码](#open-apistatuscode)
+* [Code Example](#open-apicode)
 
-* [币币交易API列表](#open-apitradelist)
+* [Status Code](#open-apistatuscode)
+
+* [Spot Trading List API](#open-apitradelist)
   * [获取所有交易对的详情](#open-apitradelist-symbollist)
   * [获取余额列表](#open-apitradelist-balancelist)
   * [下单](#open-apitradelist-ordercreate)
@@ -21,7 +23,7 @@
 
 -----------
 
-## <span id="open-api">概述 </span>
+## <span id="open-api">API Summary </span>
 
 - 所有交易API请求都使用HTTP POST
 - 交易API需要在官网申请API需要的key/secret
@@ -31,7 +33,7 @@
 - 请求的nonce参数为当前系统时间戳，单位为秒，nonce不早/晚于当前系统时间10秒
 - 单个接口访问频率最快为100ms间隔
 
-## <span id="open-apisecret">频率控制 </span>  
+## <span id="open-apisecret">Limited Control </span>  
 我们对API的请求频率进行控制，具体频率参数请参考接口详情
 
 对 API 的请求，以下标头将被返回︰
@@ -45,9 +47,9 @@ X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而�
 
 
 
-## <span id="open-apisecret">开启API权限 </span>
+## <span id="open-apisecret">Create API Key </span>
 
-### 申请API Key
+### Create an API Key
 用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
 官网地址: www.ix.com
 备用地址: www.ixex.io
@@ -96,7 +98,7 @@ leverage=100&symbol=BTCUSD&nonce=1542434791
  ```
 
 
-## <span id="open-apicode">代码示例 </span> 
+## <span id="open-apicode">Code Example </span> 
 Python：
 ``` Python
 import requests
@@ -158,23 +160,23 @@ $.ajax({
 ```
 
 
-## <span id="open-apistatuscode">状态码 </span>
+## <span id="open-apistatuscode">Status Code </span>
 
-| 错误代码        | 详细描述    |    
-| :-----    | :-----   |    
-|200	|	正常|    
-|400	|	缺少参数|    
-|401	|	缺少认证|    
-|403	|	请求过快|    
-|413	|	请求过大|    
-|500	|	非法请求|    
-|30001	|	交易对不存在|    
-|30002	|	下单数量不合法|    
-|30003	|	下单金额不合法|    
-|60045	|	资金冻结失败|
-|60046	|	下单失败|
-|60047	|	当日下单次数过多|
-|60048	|	获取当前价格失败|
+| Error Code        | Detailed Description    |    
+| :-----            | :-----   |    
+|200	            |	Sucessful|    
+|400	            |	Missing params|    
+|401	            |	Unauthorized|    
+|403	            |	Request too frequently|    
+|413	            |	Request too large|    
+|500	            |	Invalid request|    
+|30001	            |	Invalid symbol|    
+|30002	            |	Invalid amount|    
+|30003	            |	Invalid total| 
+|60045	            |	Fail to freeze funds|
+|60046	            |	Order failed|
+|60047	            |	Too many orders in the trading cycle|
+|60048	            |	Failed to get current price|
 
 ## <span id="open-apitradelist">币币交易API列表 </span>
 

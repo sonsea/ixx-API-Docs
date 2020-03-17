@@ -1,16 +1,18 @@
-# 金本位交易API
+### [中文](./mix_api.md)
 
-* [概述](#open-api)
+# Mix Trading API
 
-* [频率控制](#open-apilimited)
+* [API Summary](#open-api)
 
-* [开启API权限](#open-apisecret)
+* [Limited Control](#open-apilimited)
 
-* [代码示例](#open-apicode)
+* [Create API Key](#open-apisecret)
 
-* [状态码](#open-apistatuscode)
+* [Code Example](#open-apicode)
 
-* [金本位API列表](#open-apimixlist)
+* [Status Code](#open-apistatuscode)
+
+* [Mix Trading List API](#open-apimixlist)
   * [获取交易对列表](#open-apimixlist-mixsymbollist)
   * [用户余额(持仓)](#open-apimixlist-mixaccountbalancelist)
   * [修改保证金](#open-apimixlist-mixaccounttransfermargin)
@@ -24,7 +26,7 @@
 
 -----------
 
-## <span id="open-api">概述 </span>
+## <span id="open-api">API Summary </span>
 
 - 所有交易API请求都使用HTTP POST
 - 交易API需要在官网申请API需要的key/secret
@@ -34,7 +36,7 @@
 - 访问频率最快为100ms间隔
 - 访问ixx站点的币对时,需要在请求的header里添加from = 'ixx'
 
-## <span id="open-apisecret">频率控制 </span>  
+## <span id="open-apisecret">Limited Control </span>  
 我们对API的请求频率进行控制，具体频率参数请参考接口详情
 
 对 API 的请求，以下标头将被返回︰
@@ -45,6 +47,16 @@
 X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而参数不同
 如果你已经被频率限制，你将收到 403 响应, 以及一个额外的标头X-ratelimit-next, 它意味着你在重试前需要等待的时间
  
+
+## <span id="open-apisecret">Create API Key </span>
+
+### Create an API Key
+用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
+官网地址: www.ix.com
+备用地址: www.ixex.io
+
+**_注意： 请勿向任何人泄露这两个参数，这两个参数关乎您账号的安全。_**    
+
 ### 请求认证
 在调用 API 时，需要提供 API Key 作为每个请求的身份识别，并且通过secret对请求数据加签
 
@@ -86,7 +98,7 @@ leverage=100&symbol=BTCUSD&nonce=1542434791
  
  ```
 
-## <span id="open-apicode">代码示例 </span> 
+## <span id="open-apicode">Code Example </span> 
 Python：
 ``` Python
 import requests
@@ -147,21 +159,21 @@ $.ajax({
 ```
 
 
-## <span id="open-apistatuscode">状态码 </span>
+## <span id="open-apistatuscode">Status Code </span>
 
-| 错误代码        | 详细描述    |    
-| :-----    | :-----   |    
-|200	|	正常|    
-|400	|	缺少参数|    
-|401	|	缺少认证|    
-|403	|	请求过快|    
-|413	|	请求过大|    
-|500	|	非法请求|    
-|30001	|	交易对不存在|    
-|30002	|	下单数量不合法|    
-|30003	|	下单金额不合法| 
+| Error Code        | Detailed Description    |    
+| :-----            | :-----   |    
+|200	            |	Sucessful|    
+|400	            |	Missing params|    
+|401	            |	Unauthorized|    
+|403	            |	Request too frequently|    
+|413	            |	Request too large|    
+|500	            |	Invalid request|    
+|30001	            |	Invalid symbol|    
+|30002	            |	Invalid amount|    
+|30003	            |	Invalid total| 
 
-## <span id="open-apimixlist">金本位API列表 </span>
+## <span id="open-apimixlist">Mix Trading List API </span>
 
 ### <span id="open-apimixlist-mixsymbollist">获取交易对列表 POST /mix/symbol/list</span>
 - 参数
@@ -197,6 +209,9 @@ $.ajax({
     - leverages 所用杠杆
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/symbol/list -d 'nonce=1536826456'
+```
 
 	
 ### <span id="open-apimixlist-mixaccountbalancelist">用户余额(持仓) POST /mix/account/balance/list</span>
@@ -234,6 +249,9 @@ $.ajax({
   - sl_price 止损委托价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/balance/list -d 'nonce=1536826456'
+```
 	
 ### <span id="open-apimixlist-mixaccounttransfermargin">修改保证金 POST /mix/account/transfer_margin</span>
 - 参数
@@ -248,6 +266,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/transfer_margin -d 'nonce=1536826456&name=BTCUSDT&side=1&amount=1'
+```
 
 ## 订单相关
 ### <span id="open-apimixlist-mixorder">下单 POST /mix/order</span>
@@ -274,6 +295,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/order -d 'nonce=1536826456'
+```
 
 ### <span id="open-apimixlist-mixremove">撤单 POST /mix/remove</span>
 - 参数
@@ -287,6 +311,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	100毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove -d 'nonce=1536826456&name=BTCUSDT&order_id=1'
+```
 
 ### <span id="open-apimixlist-mixremoveall">一键撤单 POST /mix/remove_all</span>
 - 参数
@@ -299,6 +326,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	5000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove_all -d 'nonce=1536826456&trigger=1'
+```
 
 ### <span id="open-apimixlist-mixclose">平仓 POST /mix/close</span>
 - 参数
@@ -313,6 +343,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/close -d 'nonce=1536826456&name=BTCUSDT&side=1&price=13.00'
+```
 
 ### <span id="open-apimixlist-mixactiveorders">当前委托 POST /mix/activeorders</span>
 - 参数
@@ -340,6 +373,9 @@ $.ajax({
     - sl_price 止损价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/activeorders -d 'nonce=1536826456&page=1&size=10'
+```
 
 ### <span id="open-apimixlist-mixorderhistory">委托历史 POST /mix/orderhistory</span>
 - 参数
@@ -363,6 +399,9 @@ $.ajax({
     - update_time 更新时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/orderhistory -d 'nonce=1536826456&name=BTCUSDT&page=1&size=10'
+```
 
 ### <span id="open-apimixlist-mixaccountorderfills">已成交 POST /mix/account/orderfills</span>
 - 参数
@@ -390,3 +429,6 @@ $.ajax({
   - create_time 成交时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/orderfills -d 'nonce=1536826456&page=1&size=10'
+```

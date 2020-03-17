@@ -6,13 +6,13 @@
 
 * [Limited Control](#open-apilimited)
 
-* [Create API](#open-apisecret)
+* [Create API Key](#open-apisecret)
 
 * [Code Example](#open-apicode)
 
 * [Status Code](#open-apistatuscode)
 
-* [Futures List API](#open-apifuturelist)
+* [Futures Trading List API](#open-apifuturelist)
   * [获取交易对列表](#open-apifuturelist-symbollist)
   * [用户余额(持仓)](#open-apifuturelist-accountbalance)
   * [修改保证金](#open-apifuturelist-transfermargin)
@@ -25,7 +25,7 @@
 
 -----------
 
-## <span id="open-api">概述 </span>
+## <span id="open-api">API Summary </span>
 
 - 所有交易API请求都使用HTTP POST
 - 交易API需要在官网申请API需要的key/secret
@@ -35,7 +35,7 @@
 - 访问频率最快为100ms间隔
 - 访问ixx站点的币对时,需要在请求的header里添加from = 'ixx'
 
-## <span id="open-apisecret">频率控制 </span>  
+## <span id="open-apisecret">Limited Control </span>  
 我们对API的请求频率进行控制，具体频率参数请参考接口详情
 
 对 API 的请求，以下标头将被返回︰
@@ -48,9 +48,9 @@ X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而�
  
 
 
-## <span id="open-apisecret">开启API权限 </span>
+## <span id="open-apisecret">Create API Key </span>
 
-### 申请API Key
+### Create an API Key
 用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
 官网地址: www.ix.com
 备用地址: www.ixex.io
@@ -98,7 +98,7 @@ leverage=100&symbol=BTCUSD&nonce=1542434791
  
  ```
 
-## <span id="open-apicode">代码示例 </span> 
+## <span id="open-apicode">Code Example </span> 
 Python：
 ``` Python
 import requests
@@ -159,26 +159,26 @@ $.ajax({
 ```
 
 
-## <span id="open-apistatuscode">状态码 </span>
+## <span id="open-apistatuscode">Status Code </span>
 
-| 错误代码        | 详细描述    |    
-| :-----    | :-----   |    
-|200	|	正常|    
-|400	|	缺少参数|    
-|401	|	缺少认证|    
-|403	|	请求过快|    
-|413	|	请求过大|    
-|500	|	非法请求|    
-|30001	|	交易对不存在|    
-|30002	|	下单数量不合法|    
-|30003	|	下单金额不合法|    
-|30101	|	下单失败,余额不足以支付本笔委托保证金|
-|30011	|	下单失败,被动委托单价格出错|
-|30012	|	下单失败,创建活动委托单上限为200个|
-|30013	|	下单失败,下单杠杆超过最大价值|
-|30014	|	下单失败,单个委托单数量达到上限|
+| Error Code        | Detailed Description    |    
+| :-----            | :-----   |    
+|200	            |	Successful|    
+|400	            |	Missing params|    
+|401	            |	Unauthorized|    
+|403	            |	Request too frequently|    
+|413	            |	Request too large|    
+|500	            |	Invalid request|    
+|30001	            |	Invalid symbol|    
+|30002	            |	Invalid amount|    
+|30003	            |	Invalid total|    
+|30101	            |	Insufficient balance|
+|30011	            |	Order failed, price error of the passive order|
+|30012	            |	Order failed, the max number of active order creatied is 200|
+|30013	            |	The order failed, order leverage exceeded the max value|
+|30014	            |	Order failed, orders qty reach top limit|
 
-## <span id="open-apifuturelist">期货API列表 </span>
+## <span id="open-apifuturelist">Futures List API </span>
 
 ### <span id="open-apifuturelist-symbollist">获取交易对列表 POST /contract/symbol/list </span>
 - 参数

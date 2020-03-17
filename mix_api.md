@@ -1,3 +1,5 @@
+### [English](./mix_api_en.md)
+
 # 金本位交易API
 
 * [概述](#open-api)
@@ -197,6 +199,9 @@ $.ajax({
     - leverages 所用杠杆
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/symbol/list -d 'nonce=1536826456'
+```
 
 	
 ### <span id="open-apimixlist-mixaccountbalancelist">用户余额(持仓) POST /mix/account/balance/list</span>
@@ -234,6 +239,9 @@ $.ajax({
   - sl_price 止损委托价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/balance/list -d 'nonce=1536826456'
+```
 	
 ### <span id="open-apimixlist-mixaccounttransfermargin">修改保证金 POST /mix/account/transfer_margin</span>
 - 参数
@@ -248,6 +256,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/transfer_margin -d 'nonce=1536826456&name=BTCUSDT&side=1&amount=1'
+```
 
 ## 订单相关
 ### <span id="open-apimixlist-mixorder">下单 POST /mix/order</span>
@@ -274,6 +285,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/order -d 'nonce=1536826456'
+```
 
 ### <span id="open-apimixlist-mixremove">撤单 POST /mix/remove</span>
 - 参数
@@ -287,6 +301,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	100毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove -d 'nonce=1536826456&name=BTCUSDT&order_id=1'
+```
 
 ### <span id="open-apimixlist-mixremoveall">一键撤单 POST /mix/remove_all</span>
 - 参数
@@ -299,6 +316,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	5000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove_all -d 'nonce=1536826456&trigger=1'
+```
 
 ### <span id="open-apimixlist-mixclose">平仓 POST /mix/close</span>
 - 参数
@@ -313,6 +333,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/close -d 'nonce=1536826456&name=BTCUSDT&side=1&price=13.00'
+```
 
 ### <span id="open-apimixlist-mixactiveorders">当前委托 POST /mix/activeorders</span>
 - 参数
@@ -340,6 +363,9 @@ $.ajax({
     - sl_price 止损价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/activeorders -d 'nonce=1536826456&page=1&size=10'
+```
 
 ### <span id="open-apimixlist-mixorderhistory">委托历史 POST /mix/orderhistory</span>
 - 参数
@@ -363,6 +389,9 @@ $.ajax({
     - update_time 更新时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/orderhistory -d 'nonce=1536826456&name=BTCUSDT&page=1&size=10'
+```
 
 ### <span id="open-apimixlist-mixaccountorderfills">已成交 POST /mix/account/orderfills</span>
 - 参数
@@ -390,3 +419,6 @@ $.ajax({
   - create_time 成交时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/orderfills -d 'nonce=1536826456&page=1&size=10'
+```

@@ -1,3 +1,5 @@
+### [English](./unit_api_en.md)
+
 # 币本位交易API
 
 * [概述](#open-api)
@@ -196,6 +198,9 @@ $.ajax({
   - site 站点 1:ix,2:ixx
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/symbol/list -d 'nonce=1536826456'
+```
 
 	
 ### <span id="open-apiunitlist-unitaccountbalancelist">用户余额(持仓) POST /unit/account/balance/list</span>
@@ -231,6 +236,9 @@ $.ajax({
   - sl_price 止损委托价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/account/balance/list -d 'nonce=1536826456'
+```
 	
 ### <span id="open-apiunitlist-unitaccounttransfermargin">修改保证金 POST /unit/account/transfer_margin</span>
 - 参数
@@ -244,6 +252,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/account/transfer_margin -d 'nonce=1536826456&name=EHTUSD&amount=1'
+```
 
 ## 订单相关
 ### <span id="open-apiunitlist-unitorder">下单 POST /unit/order</span>
@@ -271,6 +282,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/order -d 'nonce=1536826456'
+```
 
 ### <span id="open-apiunitlist-unitremove">撤单 POST /unit/remove</span>
 - 参数
@@ -284,6 +298,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	100毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/remove -d 'nonce=1536826456&name=EHTUSD&order_id='
+```
 
 ### <span id="open-apiunitlist-unitremoveall">一键撤单 POST /unit/remove_all</span>
 - 参数
@@ -296,6 +313,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	5000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/remove_all -d 'nonce=1536826456&trigger=0'
+```
 
 ### <span id="open-apiunitlist-unitclose">平仓 POST /unit/close</span>
 - 参数
@@ -309,6 +329,9 @@ $.ajax({
 - 字段说明
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/close -d 'nonce=1536826456&name=EHTUSD&price='
+```
 
 ### <span id="open-apiunitlist-unitactiveorders">当前委托 POST /unit/activeorders</span>
 - 参数
@@ -335,6 +358,9 @@ $.ajax({
 	- sl_price 止损价格
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/activeorders -d 'nonce=1536826456&page=1&size=10'
+```
 
 ### <span id="open-apiunitlist-unitorderhistory">委托历史 POST /unit/orderhistory</span>
 - 参数
@@ -358,6 +384,9 @@ $.ajax({
     - update_time 更新时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/orderhistory -d 'nonce=1536826456&name=EHTUSD&page=1&size=10'
+```
 
 ### <span id="open-apiunitlist-unitaccountorderfills">已成交 POST /unit/account/orderfills</span>
 - 参数
@@ -385,3 +414,6 @@ $.ajax({
     - create_time 成交时间
 - 限定访问间隔时间
 	-	1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/unit/account/orderfills -d 'nonce=1536826456&page=1&size=10'
+```
