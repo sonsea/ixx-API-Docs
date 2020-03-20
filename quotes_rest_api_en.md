@@ -1,85 +1,83 @@
 ### [中文](./quotes_rest_api.md)
 
-# 行情和盘口REST API 参考 v1
+# REST API Retrieve Market Data And Order Book Depth,Please refer to v1
 
-## 响应格式
-所有推送消息均为JSON，包含:
-+ 预留状态码(**code**);
-+ 数据(**data**)
+## Response Format
+All response message used JSON format, Include:
++ reserve status code(**code**);
++ data(**data**)
 
-示例如下：
+Example：
 ``` javascript
-### [中文](./quotes_rest_api.md)
-
 {
-    "code":0,   // 状态码，正确响应时为0
+    "code":0,   // status code，Successful response code 0
     "data":{
-        ...     // 推送数据
+        ...     // response data
     }
 }
 ```
 
-### 状态码
+### Status Code
 
-#### 1001 参数缺失
+#### 1001 Missing parameters
 
-示例如下：
+Example：
 
 ``` javascript
 {
-    "code": 1001,     // 状态码
-    "data": "pair"    // 缺失的参数
+    "code": 1001,     // status code
+    "data": "pair"    // missing parameter
 }
 ```
 
-#### 1002 参数无效
+#### 1002 Invalid parameters
 
-示例如下：
+Example：
 
 ``` javascript
 {
-    "code": 1002,     // 状态码
-    "data": "pair"    // 无效的参数
+    "code": 1002,     // status code
+    "data": "pair"    // Invalid parameters
 }
 ```
 
 
 
-#### 1003 参数类型不匹配
+#### 1003 Parameters type mismatch
 
-示例如下：
+Example：
 
 ``` javascript
 {
-    "code": 1003,     // 状态码
-    "data": "pair"    // 类型不匹配的参数
+    "code": 1003,     // status code
+    "data": "pair"    // mismatch parameters
 }
 ```
 
 ​
 
-#### 1004 交易对不存在
+#### 1004 Invalid symbol
 
-示例如下：
+Example：
 
 ``` javascript
 {
-    "code":1004,      // 状态码
-    "data":"1111"     // 不存在的交易对名称
+    "code":1004,      // code
+    "data":"1111"     // Invalid symbol name
 }
 ```
 
-## 路径
+## Path
 
-### 全部交易品种数据
+### All market paris data
 URI：**/v1/market/pairs**
-请求方式：**GET**
-请求示例：
+Request format：**GET**
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/market/pairs
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
@@ -93,50 +91,50 @@ curl https://q.ixex.io/v1/market/pairs
 }
 ```
 
-### 大盘周期数据
+### Market Cycle histories data
 URI：**/v1/market/histories?period={period}&pairs={pairs}**
-请求方式：**GET**
-请求参数：
+Request format：**GET**
+Request parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+|name         | type        | description | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| period | 字符串 | 行情周期 | 是 |
-| pairs | 字符串 | 指定交易对，以逗号分割 | 否 |
+| period | string | market cycle histories | yes |
+| pairs | string | Specify pairs of transactions separated by commas | no |
 
-#### 周期参数(**period**)
+#### Cycle parameters(**period**)
 
-|  参数  | 定义  |  参数  | 定义  |  参数  | 定义  |
+|  parameter  | definition  |  parameter  | definition  |  parameter  | definition  |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  1m   |  一分钟  |  1h   |  一小时  |  1d   |    日    |
-|  5m   |  五分钟  |  2h   |  两小时  |  1w   |    周    |
-|  15m  | 十五分钟 |  4h   |  四小时  |  1M   |    月    |
-|  30m  | 三十分钟 |  6h   |  六小时  |
-|       |         |  12h  | 十二小时 |
+|  1m   |  1 min  |  1h   |  1 hour  |  1d   |    1 day    |
+|  5m   |  5 min  |  2h   |  2 hours  |  1w   |    1 week    |
+|  15m  |  15 min |  4h   |  4 hours  |  1M   |    1 month    |
+|  30m  |  30 min |  6h   |  6 hours  |
+|       |         |  12h  |  12 hours |
 
-请求示例：
-不传递**pairs**参数
+Example Request：
+The parameter **pairs** is not transferred
 ``` text
 curl https://q.ixex.io/v1/market/histories?period=1d
 ```
 
-响应示例：
+Example Response ：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1529798400000,  // 时间，单位毫秒
+            "time": 1529798400000,  // time，with milliseconds resolution
             "pair": "ETH_BTC",
             "values": [
-                "0.076973",         // 起始价
-                "0.076838",         // 结束价
-                "0.07606",          // 最低价
-                "0.077378",         // 最高价
-                "27.3411",          // 成交量
-                "2.1000977805",     // 成交额
-                "0.076973",         // 上一周期结束价
-                "121",              // 成交笔数
-                "0.205"             // 现量
+                "0.076973",         // start price
+                "0.076838",         // end price
+                "0.07606",          // lower price 
+                "0.077378",         // highest price
+                "27.3411",          // trading volume
+                "2.1000977805",     // trading amount
+                "0.076973",         // last cycle end price
+                "121",              // trading number
+                "0.205"             // trade amount
             ]
         },
         {
@@ -203,30 +201,30 @@ curl https://q.ixex.io/v1/market/histories?period=1d
 }
 ```
 
-请求示例：
-传递**pairs**参数，并传递一个不存在的交易对
+Example Request：
+Transferred the parameter of **pairs** and not exist symbol
 ``` text
 curl https://q.ixex.io/v1/market/history?pairs=ETH_BTC,EOS_BTC,UNKNOWN&period=1d
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1529798400000,  // 时间，单位毫秒
+            "time": 1529798400000,  // time，with milliseconds resolution
             "pair": "ETH_BTC",
             "values": [
-                "0.076973",         // 起始价
-                "0.076838",         // 结束价
-                "0.07606",          // 最低价
-                "0.077378",         // 最高价
-                "27.3411",          // 成交量
-                "2.1000977805",     // 成交额
-                "0.076973",         // 上一周期结束价
-                "121",              // 成交笔数
-                "0.205"             // 现量
+                "0.076973",         // begin price
+                "0.076838",         // end price
+                "0.07606",          // lower price 
+                "0.077378",         // highest price
+                "27.3411",          // trading volume
+                "2.1000977805",     // trading amount
+                "0.076973",         // last cycle end price
+                "121",              // trading number
+                "0.205"             // trade amount
             ]
         },
         {
@@ -248,40 +246,40 @@ curl https://q.ixex.io/v1/market/history?pairs=ETH_BTC,EOS_BTC,UNKNOWN&period=1d
 }
 ```
 
-### 大盘报价数据
+### Market Tickers Price
 URI：**/v1/market/tickers**
-请求方式：**GET**
-请求参数：
+Request format：**GET**
+Request Parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+| name         | type        | description | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pairs | 字符串 | 指定交易对，以逗号分割 | 否 |
+| pairs | type | Specify pairs of transactions separated by commas | no |
 
-请求示例：
-不传递**pair**参数
+Example Request：
+The parameter **pairs** is not transferred
 ``` text
 curl https://q.ixex.io/v1/market/tickers
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1530862375429,                  // 时间，单位毫秒
-            "pair": "ETH_BTC",                      // 交易对名称
-            "current": "0.070269",                  // 现价
-            "volume_current": "0.2399",             // 现量
-            "increment_24h": "-0.001124",           // 24小时价格变化量
-            "highest_24h": "0.072012",              // 24小时最高价
-            "lowest_24h": "0.070082",               // 24小时最低价
-            "volume_24h": "222.45380000000003",     // 24小时成交量
-            "highest_bid": "0.069891",              // 买一价
-            "highest_bid_amount": "0.1",            // 买一量
-            "lowest_ask": "0.070642",               // 卖一价
-            "lowest_ask_amount": "0.1",             // 卖一量
-            "change_24h": "-1.5744"                 // 24小时涨跌幅，百分比
+            "time": 1530862375429,                  // time，with milliseconds resolution
+            "pair": "ETH_BTC",                      // trading pair name
+            "current": "0.070269",                  // trade price
+            "volume_current": "0.2399",             // trade amount
+            "increment_24h": "-0.001124",           // trading volume for price of past 24 hours
+            "highest_24h": "0.072012",              // highest price in the past 24 hours
+            "lowest_24h": "0.070082",               // lowest price in the past 24 hours
+            "volume_24h": "222.45380000000003",     // trading volume of past 24 hours
+            "highest_bid": "0.069891",              // best bid price
+            "highest_bid_amount": "0.1",            // best bid price aount
+            "lowest_ask": "0.070642",               // best ask price
+            "lowest_ask_amount": "0.1",             // best ask price amount
+            "change_24h": "-1.5744"                 // Change pct in the past 24 hours
         },
         {
             "time": 1530862375218,
@@ -347,31 +345,31 @@ curl https://q.ixex.io/v1/market/tickers
 }
 ```
 
-请求示例：
-传递**pair**参数，并传递一个不存在的交易对
+Example Request：
+Transferred the parameter of **pairs** and not exist symbol
 ``` text
 curl https://q.ixex.io/v1/market/tickers?pairs=ETH_BTC,EOS_BTC,UNKNOWN
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1530862375429,                  // 时间，单位毫秒
-            "pair": "ETH_BTC",                      // 交易对名称
-            "current": "0.070269",                  // 现价
-            "volume_current": "0.2399",             // 现量
-            "increment_24h": "-0.001124",           // 24小时价格变化量
-            "highest_24h": "0.072012",              // 24小时最高价
-            "lowest_24h": "0.070082",               // 24小时最低价
-            "volume_24h": "222.45380000000003",     // 24小时成交量
-            "highest_bid": "0.069891",              // 买一价
-            "highest_bid_amount": "0.1",            // 买一量
-            "lowest_ask": "0.070642",               // 卖一价
-            "lowest_ask_amount": "0.1",             // 卖一量
-            "change_24h": "-1.5744"                 // 24小时涨跌幅，百分比
+            "time": 1530862375429,                  // time，with milliseconds resolution
+            "pair": "ETH_BTC",                      // trading pair name
+            "current": "0.070269",                  // trade price
+            "volume_current": "0.2399",             // trade amount
+            "increment_24h": "-0.001124",           // trading volume for price of past 24 hours
+            "highest_24h": "0.072012",              // highest price in the past 24 hours
+            "lowest_24h": "0.070082",               // lowest price in the past 24 hours
+            "volume_24h": "222.45380000000003",     // trading volume of past 24 hours
+            "highest_bid": "0.069891",              // best bid price
+            "highest_bid_amount": "0.1",            // best bid price amount
+            "lowest_ask": "0.070642",               // best ask price
+            "lowest_ask_amount": "0.1",             // best ask price amount
+            "change_24h": "-1.5744"                 // Change pct in the past 24 hours
         },
         {
             "time": 1530862375218,
@@ -392,22 +390,22 @@ curl https://q.ixex.io/v1/market/tickers?pairs=ETH_BTC,EOS_BTC,UNKNOWN
 }
 ```
 
-### 报价数据
+### Quoted Price Data
 
 URI：**/v1/ticker/{pair}**
-请求方式：**GET**
-参数：
+Request format：**GET**
+Parameters：
 
-| 参数名 | 类型   | 说明       | 是否必需 |
+| name | type   | description       | Is it necessary |
 | ------ | :----- | :--------- | :------: |
-| pair   | 字符串 | 交易对名称 |    是    |
+| pair   | string | Specify pairs of transactions |    yes    |
 
-请求示例：
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/ticker/ETH_USDT
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
@@ -429,35 +427,35 @@ curl https://q.ixex.io/v1/ticker/ETH_USDT
 }
 ```
 
-### 周期数据
+### Market Cycle Data 
 
-### 按结果集长度查询周期数据
+### Query market cycle data by number of results per request.
 URI：**/v1/history/{pair}?period={period}&size={size}**
-请求方式：**GET**
-参数：
+Request format：**GET**
+Parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+| parameter name         | type        | description | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| period | 字符串 | 行情周期 | 是 |
-| size | 整型 | 结果集长度 | 是 |
+| pair | string | Specify pairs of transactions | yes |
+| period | string | market cycle | yes |
+| size | int | number of results | yes |
 
-##### 周期参数(**period**)
+#### Cycle parameters(**period**)
 
-|  参数  | 定义  |  参数  | 定义  |  参数  | 定义  |
+|  parameter  | definition  |  parameter  | definition  |  parameter  | definition  |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  1m   |  一分钟  |  1h   |  一小时  |  1d   |    日    |
-|  5m   |  五分钟  |  2h   |  两小时  |  1w   |    周    |
-|  15m  | 十五分钟 |  4h   |  四小时  |  1M   |    月    |
-|  30m  | 三十分钟 |  6h   |  六小时  |
-|       |         |  12h  | 十二小时 |
+|  1m   |  1 min  |  1h   |  1 hour  |  1d   |    1 day    |
+|  5m   |  5 min  |  2h   |  2 hours  |  1w   |    1 week    |
+|  15m  |  15 min |  4h   |  4 hours  |  1M   |    1 month    |
+|  30m  |  30 min |  6h   |  6 hours  |
+|       |         |  12h  |  12 hours |
 
-请求示例：
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/history/ETH_USDT?period=1m&size=5
 ```
 
-响应示例：
+Example Response：
 
 ``` javascript
 {
@@ -542,34 +540,34 @@ curl https://q.ixex.io/v1/history/ETH_USDT?period=1m&size=5
 }
 ```
 
-#### 指定时间范围查询周期数据
+#### Query cycle data in specified time range
 URI：**/v1/history/millis/{pair}?period={period}&begin={begin}&end={end}**
-请求方式：**GET**
-请求参数：
+Request format：**GET**
+Request Parameters：
 
-| 参数名         | 类型        | 类型  | 是否必需 |
+| parameter name         | type        | description  | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| period | 字符串 | 行情周期 | 是 |
-| begin | 长整型 | 查询起始时间，单位为毫秒 | 是 |
-| end | 长整型 | 查询结束时间，单位为毫秒 | 是 |
+| pair | string | Specify pairs of transactions | yes |
+| period | string | market cycle | yes |
+| begin | long int | begin time，with milliseconds resolution | yes |
+| end | long int | end time，with milliseconds resolution | yes |
 
-##### 周期参数(**period**)
+#### Cycle parameters(**period**)
 
-|  参数  | 定义  |  参数  | 定义  |  参数  | 定义  |
+|  parameter  | definition  |  parameter  | definition  |  parameter  | definition  |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  1m   |  一分钟  |  1h   |  一小时  |  1d   |    日    |
-|  5m   |  五分钟  |  2h   |  两小时  |  1w   |    周    |
-|  15m  | 十五分钟 |  4h   |  四小时  |  1M   |    月    |
-|  30m  | 三十分钟 |  6h   |  六小时  |
-|       |         |  12h  | 十二小时 |
+|  1m   |  1 min  |  1h   |  1 hour  |  1d   |    1 day    |
+|  5m   |  5 min  |  2h   |  2 hours  |  1w   |    1 week    |
+|  15m  |  15 min |  4h   |  4 hours  |  1M   |    1 month    |
+|  30m  |  30 min |  6h   |  6 hours  |
+|       |         |  12h  |  12 hours |
 
-请求示例：
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/history/millis/ETH_USDT?period=1d&begin=1567958400000&end=1568476800000
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
@@ -683,23 +681,23 @@ curl https://q.ixex.io/v1/history/millis/ETH_USDT?period=1d&begin=1567958400000&
 }
 ```
 
-### 成交数据
+### Filled Orders
 
 URI：**/v1/deal/{pair}?size={size}**
-请求方式：**GET**
-参数：
+Request format：**GET**
+Parameters：
 
-| 参数名         | 类型  | 说明          | 是否必需 |
+| parameter name         | type        | description  | Is it necessary |
 | ------------- | :-----|:------------- | :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| size | 整型 | 结果集长度 | 是 |
+| pair | string | Specify pairs of transactions | yes |
+| size | int | number of results | yes |
 
-请求示例：
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/deal/ETH_USDT?size=2
 ```
 
-响应示例：
+Example Response：
 ``` javascript
 {
     "code": 0,
@@ -734,48 +732,48 @@ curl https://q.ixex.io/v1/deal/ETH_USDT?size=2
 
 
 
-### 订单数据
+### Orders
 
 URI：**/v1/orderbook/{pair}?offset={offset}&accuracy={accuracy}&size={size}**
-请求方式：**GET**
-参数：
+Request format：**GET**
+Parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+| parameter name         | type        | description  | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| size | 整型 | 档位数，可选：5、10、20 | 是 |
-| offset | 整型 | 浮点位偏移量 | 是 |
-| accuracy | 整型 | 统计精度 | 是 |
+| pair | type | Specify pairs of transactions | yes |
+| size | int | Position，option：5、10、20 | yes |
+| offset | int | Floating point bit offset | yes |
+| accuracy | int |  Statistical accuracy  | yes |
 
-#### 统计精度(**accuracy**)
-用于多空双方查询、订单推送接口，进位模式half_even
+#### Statistical accuracy(**accuracy**)
+Used long and short position query and order push interface, carry bit half_even
 
-| 参数 |     定义      |
+| parameter |     definition      |
 | :--: | :-----------: |
-|  1   |  精度保留为1  |
-|  2   | 精度保留为2.5 |
-|  5   |  保留精度为5  |
+|  1   |  Accuracy continue to have 1  |
+|  2   |  Accuracy continue to have 2.5 |
+|  5   |  Accuracy continue to havve 5  |
 
 
 
-#### 浮点位偏移量(**offset**)
+#### Floating point bit offset(**offset**)
 
-用于涉及买卖双方的API，进位模式half_even，可选范围：**0～10**；
-偏移量最大为10，当交易品种浮点位精度小于10时，最大偏移量为该交易品种浮点位精度
+Used sell and buy side API，carry bit half_even，Options：**0～10**；
+Max offset 10，When the floating-point precision of the transaction type is less than 10, the maximum offset is the floating-point precision of the transaction type
 
-推送格式：
+Response format：
 
-| 参数名         | 类型  | 说明          |
+| name         | type  | description          |
 | :------------ | :-----|:------------- |
-| asks | 数组 | 卖方订单档位集合 |
-| bids | 数组 | 买方订单档位集合 |
+| asks | array | Sell side depth |
+| bids | array | Buy side depth |
 
-请求示例
+Example Request:
 ``` text
 curl https://q.ixex.io/v1/orderbook/ETH_USDT?offset=0&accuracy=1&size=5
 ```
 
-响应示例：
+Example Response:
 ``` javascript
 {
     "code": 0,
@@ -848,20 +846,20 @@ curl https://q.ixex.io/v1/orderbook/ETH_USDT?offset=0&accuracy=1&size=5
 }
 ```
 
-### 获取服务器时间
+### Getting Server Time
 
 URI：**/v1/time**
-请求方式：**GET**
-请求参数：无
-请求示例：
+Request format：**GET**
+Request parameters：no
+Example Request：
 ``` text
 curl https://q.ixex.io/v1/time
 ```
-响应示例：
+Example Response：
 ``` javascript
 {
-    "iso":"2018-06-19T16:28:22.755Z",   // ISO8601 (yyyy-MM-ddTHH:mm:ss.SSSZZ) 格式时间戳
-    "mills":1529425702755,              // 时间戳，单位为毫秒
+    "iso":"2018-06-19T16:28:22.755Z",   // ISO8601 (yyyy-MM-ddTHH:mm:ss.SSSZZ)  format Timestamps
+    "mills":1529425702755,              // Timestamps, with milliseconds resolution
     "epoch":1529425702                  // Unix time
 }
 ```

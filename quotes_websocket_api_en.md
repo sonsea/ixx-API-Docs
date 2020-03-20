@@ -1,16 +1,16 @@
 ### [中文](./quotes_websocket_api.md)
 
-# 行情和盘口WebSocket API 参考 v1
+# WebSocket API Retrieve Market Data And Order Book Depth,Please refer to v1
 
-## 连接频道
+## Connect Channel
 
-以**Beta**环境为例，使用WebSocket连接 **/v1/ticker/EOS_ETH** 频道，例如：
+Used WebSocket connect **/v1/ticker/EOS_ETH** channel take the **Beta** environment for example：
 
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/ticker/EOS_ETH");
 ```
 
-客户端请求为：
+Client for request：
 
 ``` text
 GET wss://ws.ixex.io/v1/ticker/EOS_ETH HTTP/1.1
@@ -24,7 +24,7 @@ Sec-WebSocket-Key: zVu/qw6mod9ivrbSex2GBw==
 Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 ```
 
-服务端响应为：
+Server Response：
 
 ``` text
 HTTP/1.1 101 Switching Protocols
@@ -36,13 +36,13 @@ Upgrade: WebSocket
 Sec-WebSocket-Accept: ip3WBDpEnyzPMRPngEgDZgM+6lU=
 ```
 
-如果连接不存在的频道，服务器会响应HTTP 404状态码，例如：
+If you connect to a channel that does not exist, the server responds with the HTTP 404 status code for example:
 
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/unknown");
 ```
 
-客户端请求为：
+Client for request：
 ``` text
 GET wss://ws.ixex.io/v1/unknown HTTP/1.1
 Host: ws.ixex.io
@@ -55,7 +55,7 @@ Sec-WebSocket-Key: BP2dOFyaJFIIb2+E77/7fA==
 Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 ```
 
-服务器响应为：
+Server response：
 
 ``` text
 HTTP/1.1 404 Not Found
@@ -67,12 +67,12 @@ Server: nginx
 Content-Encoding: gzip
 ```
 
-如果连接的频道存在，但参数错误，例如交易对不存在，服务器响应后会主动断开连接，例如：
+If the connected channel exists, but the parameters are wrong, for example, if the transaction pair does not exist, the server will actively disconnect after responding, for example;
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/ticker/EOS");
 ```
 
-客户端请求为：
+Client Request：
 ``` text
 GET wss://ws.ixex.io/v1/ticker/EOS HTTP/1.1
 Host: ws.ixex.io
@@ -85,7 +85,7 @@ Sec-WebSocket-Key: /ulaHe5O/DCNxbF30evMWQ==
 Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 ```
 
-服务端响应为：
+Server response：
 ``` text
 HTTP/1.1 101 Switching Protocols
 Date: Thu, 14 Jun 2018 11:54:49 GMT
@@ -96,64 +96,64 @@ Upgrade: WebSocket
 Sec-WebSocket-Accept: 4RdyPxpw7+pNAG6bpU5l/gwSIEY=
 ```
 
-## 推送格式
-所有推送消息均为JSON，包含:
-+ 预留状态码(**code**);
-+ 数据(**data**)
+## Response Format
+All response message used JSON format, Include:
++ reserve status code(**code**);
++ data(**data**)
 
-示例如下：
+Example：
 ``` javascript
 {
-    "code":0,   // 预留状态码，当前版本尚未使用
+    "code":0,   // status code,the current version is not used
     "data":{
-        ...     // 推送数据
+        ...     // response data
     }
 }
 ```
 
 
-## 公共频道
+## Public Channel
 
-### 大盘周期频道
+### Market Cycle histories data
 URI：**/v1/market/histories/{period}**  
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+|name         | type        | description | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| period | 字符串 | 行情周期 | 是 |
+| period | string | market cycle histories | yes |
 
-#### 周期参数(**period**)
+#### Cycle parameters(**period**)
 
-|  参数  | 定义  |  参数  | 定义  |  参数  | 定义  |
+|  parameter  | definition  |  parameter  | definition  |  parameter  | definition  |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  1m   |  一分钟  |  1h   |  一小时  |  1d   |    日    |  
-|  5m   |  五分钟  |  2h   |  两小时  |  1w   |    周    |
-|  15m  | 十五分钟 |  4h   |  四小时  |  1M   |    月    |
-|  30m  | 三十分钟 |  6h   |  六小时  |
-|       |         |  12h  | 十二小时 |
+|  1m   |  1 min  |  1h   |  1 hour  |  1d   |    1 day    |
+|  5m   |  5 min  |  2h   |  2 hours  |  1w   |    1 week    |
+|  15m  |  15 min |  4h   |  4 hours  |  1M   |    1 month    |
+|  30m  |  30 min |  6h   |  6 hours  |
+|       |         |  12h  |  12 hours |
 
-连接示例：
+Connect Example：
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/market/histories/1d");
 ```
 
-推送示例：
+Push Example：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1529798400000,  // 时间，单位毫秒  
-            "pair": "ETH_BTC",
-            "values": [
-                "0.076973",         // 起始价
-                "0.076838",         // 结束价
-                "0.07606",          // 最低价
-                "0.077378",         // 最高价
-                "27.3411",          // 成交量
-                "2.1000977805",     // 成交额
-                "0.076973",         // 上一周期结束价
-                "121",              // 成交笔数
-                "0.205"             // 现量
+            "time": 1529798400000,  // time，with milliseconds resolution  
+            "pair": "ETH_BTC",                      
+            "values": [                             
+                "0.076973",         // start price   
+                "0.076838",         // end price     
+                "0.07606",          // lower price   
+                "0.077378",         // highest price 
+                "27.3411",          // trading volume 
+                "2.1000977805",     // trading amount 
+                "0.076973",         // last cycle end price  
+                "121",              // trading number 
+                "0.205"             // trade amount 
             ]
         },
         {
@@ -235,33 +235,33 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/market/histories/1d");
 }
 ```
 
-### 大盘报价频道
+###  Market Tickers Price
 URI：**/v1/market/tickers**  
 
-连接示例：
+Connect example：
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/market/tickers");
 ```
 
-推送示例：
+Push example：
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1530862375429,                  // 时间，单位毫秒
-            "pair": "ETH_BTC",                      // 交易对名称
-            "current": "0.070269",                  // 现价
-            "volume_current": "0.2399",             // 现量
-            "increment_24h": "-0.001124",           // 24小时价格变化量
-            "highest_24h": "0.072012",              // 24小时最高价
-            "lowest_24h": "0.070082",               // 24小时最低价
-            "volume_24h": "222.45380000000003",     // 24小时成交量
-            "highest_bid": "0.069891",              // 买一价
-            "highest_bid_amount": "0.1",            // 买一量
-            "lowest_ask": "0.070642",               // 卖一价
-            "lowest_ask_amount": "0.1",             // 卖一量
-            "change_24h": "-1.5744"                 // 24小时涨跌幅，百分比
+            "time": 1530862375429,                  // time，with milliseconds resolution
+            "pair": "ETH_BTC",                      // trading pair name
+            "current": "0.070269",                  // trade price
+            "volume_current": "0.2399",             // trade amount
+            "increment_24h": "-0.001124",           // trading volume for price of past 24 hours
+            "highest_24h": "0.072012",              // highest price in the past 24 hours
+            "lowest_24h": "0.070082",               // lowest price in the past 24 hours
+            "volume_24h": "222.45380000000003",     // trading volume of past 24 hours
+            "highest_bid": "0.069891",              // best bid price
+            "highest_bid_amount": "0.1",            // best bid price amount
+            "lowest_ask": "0.070642",               // best ask price
+            "lowest_ask_amount": "0.1",             // best ask price amount
+            "change_24h": "-1.5744"                 // Change pct in the past 24 hours
         },
         {
             "time": 1530862374942,
@@ -342,38 +342,38 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/market/tickers");
 }
 ```
 
-### 报价频道
+### Quoted Price Data
 
 URI：**/v1/ticker/{pair}**   
-参数：
+Parameters：
 
-| 参数名 | 类型   | 说明       | 是否必需 |
+| name | type   | description       | Is it necessary |
 | ------ | :----- | :--------- | :------: |
-| pair   | 字符串 | 交易对名称 |    是    |
+| pair   | string | Specify pairs of transactions |    yes    |
 
-连接示例：
+Connect example：
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/ticker/EOS_ETH");
 ```
 
-推送示例：
+Push example：
 ``` javascript
 {
     "code": 0,
     "data": {
-        "time": 1530862854941,          // 时间，单位毫秒
-        "pair": "EOS_ETH",              // 交易对名称
-        "current": "0.018334",          // 现价
-        "volume_current": "0",          // 现量
-        "increment_24h": "-0.000658",   // 24小时价格变化量
-        "highest_24h": "0.019975",      // 24小时最高价
-        "lowest_24h": "0.017568",       // 24小时最低价
-        "volume_24h": "27285.2885",     // 24小时成交量
-        "highest_bid": "0.018149",      // 买一价
-        "highest_bid_amount": "7.62",   // 买一量
-        "lowest_ask": "0.018516",       // 卖一价
-        "lowest_ask_amount": "7.7",     // 卖一量
-        "change_24h": "-3.4646"         // 24小时涨跌幅，百分比
+        "time": 1530862854941,          // time，with milliseconds resolution
+        "pair": "EOS_ETH",              // trading pair name
+        "current": "0.018334",          // trrade price
+        "volume_current": "0",          // trade amount
+        "increment_24h": "-0.000658",   // trading volume for price of past 24 hours
+        "highest_24h": "0.019975",      // highest price in the past 24 hours
+        "lowest_24h": "0.017568",       // lowest price in the past 24 hours
+        "volume_24h": "27285.2885",     // trading volume of past 24 hours
+        "highest_bid": "0.018149",      // best bid price
+        "highest_bid_amount": "7.62",   // best bid price amount
+        "lowest_ask": "0.018516",       // best ask price
+        "lowest_ask_amount": "7.7",     // best ask price amount
+        "change_24h": "-3.4646"         // Change pct in the past 24 hours
     }
 }
 ```
@@ -382,82 +382,82 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/ticker/EOS_ETH");
 
 
 
-### 周期频道
+### Market Cycle Data 
 
 URI：**/v1/history/{pair}/{period}**  
-参数：
+Parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+| parameter name         | type        | description | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| period | 字符串 | 行情周期 | 是 |
+| pair | string | Specify pairs of transactions | yes |
+| period | string | market cycle | yes |
 
-#### 周期参数(**period**)
+#### Cycle parameters(**period**)
 
-|  参数  | 定义  |  参数  | 定义  |  参数  | 定义  |
+|  parameter  | definition  |  parameter  | definition  |  parameter  | definition  |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|  1m   |  一分钟  |  1h   |  一小时  |  1d   |    日    |  
-|  5m   |  五分钟  |  2h   |  两小时  |  1w   |    周    |
-|  15m  | 十五分钟 |  4h   |  四小时  |  1M   |    月    |
-|  30m  | 三十分钟 |  6h   |  六小时  |
-|       |         |  12h  | 十二小时 |
+|  1m   |  1 min  |  1h   |  1 hour  |  1d   |    1 day    |
+|  5m   |  5 min  |  2h   |  2 hours  |  1w   |    1 week    |
+|  15m  |  15 min |  4h   |  4 hours  |  1M   |    1 month    |
+|  30m  |  30 min |  6h   |  6 hours  |
+|       |         |  12h  |  12 hours |
 
-连接示例：
+Connect Example：
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/history/EOS_ETH/1m");
 ```
 
-推送示例：  
+Push Example：  
 
 ``` javascript
 {
     "code": 0,
     "data": [
         {
-            "time": 1529808300000,  // 时间，单位毫秒
-            "pair": "EOS_ETH",      // 交易对名称
+            "time": 1529808300000,  // time，with milliseconds resolution 
+            "pair": "EOS_ETH",      // Specify pairs of transactions
             "values": [
-                "0.017436",         // 起始价
-                "0.017436",         // 结束价
-                "0.017436",         // 最低价
-                "0.017436",         // 最高价
-                "0",                // 成交量
-                "0",                // 成交额
-                "0.017436",         // 上一周期结束价
-                "0",                // 成交笔数
-                "17.5732"           // 现量
+                "0.017436",         // begin price
+                "0.017436",         // end price
+                "0.017436",         // lower price
+                "0.017436",         // highest price
+                "0",                // trading volume
+                "0",                // trading amount
+                "0.017436",         // last cycle end price
+                "0",                // trading number
+                "17.5732"           // trade amount
             ]
         }
     ]
 }
 ```
 
-### 成交频道
+### Filled Orders
 
 URI：**/v1/deal/{pair}**  
-参数：
+Parameters：
 
-| 参数名         | 类型  | 说明          | 是否必需 |
+| parameter name         | type        | description  | Is it necessary |
 | ------------- | :-----|:------------- | :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
+| pair | string | Specify pairs of transactions | yes |
 
-连接示例：
+Connect Example：
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/deal/EOS_ETH");
 ```
 
-推送示例：  
+Push Example：  
 
 ``` javascript
 {
     "code": 0,
     "data": [        
         {
-            "time": 1529811082258,  // 时间，单位毫秒
-            "side": "buy",          // 成交方向
+            "time": 1529811082258,  // time，with milliseconds resolution
+            "side": "buy",          // filled direction
             "values": [
-                "0.017262",         // 成交价
-                "16.1633"           // 成交量
+                "0.017262",         // filled price
+                "16.1633"           // filled amount
             ]
         },
         {
@@ -474,47 +474,47 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/deal/EOS_ETH");
 
 
 
-### 订单频道
+### Orders Channel
 
 URI：**/v1/orderbook/{pair}/{offset}/{accuracy}/{size}**  
-参数：
+Parameters：
 
-| 参数名         | 类型        | 说明 | 是否必需 |
+| parameter name         | type        | description  | Is it necessary |
 | ------------- |:------------- | :-----| :-----:|
-| pair | 字符串 | 交易对名称 | 是 |
-| size | 整型 | 档位数，可选：5、10、20 | 是 |
-| offset | 整型 | 浮点位偏移量 | 是 |
-| accuracy | 整型 | 统计精度 | 是 |
+| pair | type | Specify pairs of transactions | yes |
+| size | int | Position，option：5、10、20 | yes |
+| offset | int | Floating point bit offset | yes |
+| accuracy | int |  Statistical accuracy  | yes |
 
-#### 统计精度(**accuracy**)
-用于多空双方查询、订单推送接口，进位模式half_even
+#### Statistical accuracy(**accuracy**)
+Used long and short position query and order push interface, carry bit half_even
 
-| 参数 |     定义      |
+| parameter |     definition      |
 | :--: | :-----------: |
-|  1   |  精度保留为1  |
-|  2   | 精度保留为2.5 |
-|  5   |  保留精度为5  |
+|  1   |  Accuracy continue to have 1  |
+|  2   |  Accuracy continue to have 2.5 |
+|  5   |  Accuracy continue to havve 5  |
 
 
 
-#### 浮点位偏移量(**offset**)
+#### Floating point bit offset(**offset**)
 
-用于涉及买卖双方的API，进位模式half_even，可选范围：**0～10**；
-偏移量最大为10，当交易品种浮点位精度小于10时，最大偏移量为该交易品种浮点位精度
+Used sell and buy side API，carry bit half_even，Options：**0～10**；
+Max offset 10，When the floating-point precision of the transaction type is less than 10, the maximum offset is the floating-point precision of the transaction type
 
-推送格式：
+Response format：
 
-| 参数名         | 类型  | 说明          |
+| name         | type  | description          |
 | :------------ | :-----|:------------- |
-| asks | 数组 | 卖方订单档位集合 |
-| bids | 数组 | 买方订单档位集合 |
+| asks | array | Sell side depth |
+| bids | array | Buy side depth |
 
-连接示例
+Connect Example:
 ``` javascript
 var socket = new WebSocket("wss://ws.ixex.io/v1/orderbook/EOS_ETH/0/1/5");
 ```
 
-示例：
+Example：
 ``` javascript
 {
     "code": 0,
@@ -522,8 +522,8 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/orderbook/EOS_ETH/0/1/5");
         "asks": [
             {
                 "values": [
-                    "0.017409", // 卖价
-                    "7.96"      // 卖量
+                    "0.017409", // sell price
+                    "7.96"      // sell amount
                 ]
             },
             {
@@ -554,8 +554,8 @@ var socket = new WebSocket("wss://ws.ixex.io/v1/orderbook/EOS_ETH/0/1/5");
         "bids": [
             {
                 "values": [
-                    "0.017021", // 买价
-                    "6.81"      // 买量
+                    "0.017021", // buy price
+                    "6.81"      // buy amount
                 ]
             },
             {
