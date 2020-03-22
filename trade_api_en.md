@@ -13,79 +13,77 @@
 * [Status Code](#open-apistatuscode)
 
 * [Spot Trading List API](#open-apitradelist)
-  * [获取所有交易对的详情](#open-apitradelist-symbollist)
-  * [获取余额列表](#open-apitradelist-balancelist)
-  * [下单](#open-apitradelist-ordercreate)
-  * [撤单](#open-apitradelist-orderremove)
-  * [查询委托](#open-apitradelist-orderactive)
-  * [历史订单](#open-apitradelist-orderhistory)
-  * [查询活跃委托订单详情](#open-apitradelist-orderquery)
+  * [Get Trading All Pairs List](#open-apitradelist-symbollist)
+  * [Available Balance Of User](#open-apitradelist-balancelist)
+  * [Place Order](#open-apitradelist-ordercreate)
+  * [Cancel Order](#open-apitradelist-orderremove)
+  * [Before One Of Limit Order](#open-apitradelist-orderactive)
+  * [History Of Order](#open-apitradelist-orderhistory)
+  * [Query Actived Detail Of Limit Order](#open-apitradelist-orderquery)
 
 -----------
 
 ## <span id="open-api">API Summary </span>
 
-- 所有交易API请求都使用HTTP POST
-- 交易API需要在官网申请API需要的key/secret
-- 请求的header里添加version = '2.0'
-- ixx平台请求的header里添加from = 'ixx'
-- 请求的header里添加key/sign，sign=hash('sha256', $post_data.$secret)
-- 请求的nonce参数为当前系统时间戳，单位为秒，nonce不早/晚于当前系统时间10秒
-- 单个接口访问频率最快为100ms间隔
+- All trading API request use HTTP POST 
+- All trading API need key/secret, you can create the key/secret with IXX Official website
+- Add version = '2.0' in the requested header
+- Add key/sign in the requested header，the sign calculation method : sign=hash('sha256', $post_data.$secret)
+- The parameter of nonce in the requested is current system time, Bar size in seconds, No earlier / no later than 10 seconds of the current system 
+- The fastest access frequency is 100ms interval
+- You must add from = 'ixx' in the requested header when you visit the currency pairs of IXX site
 
 ## <span id="open-apisecret">Limited Control </span>  
-我们对API的请求频率进行控制，具体频率参数请参考接口详情
+We control the API request rate limitts, Please refer to the interface details for specific frequency parameters.
 
-对 API 的请求，以下标头将被返回︰
+For requests to the API, the following headers will be returned:
 ```
 "X-ratelimit-limit: 1000"
 "X-ratelimit-next: 500"
 ```
-X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而参数不同
-如果你已经被频率限制，你将收到 403 响应, 以及一个额外的标头X-ratelimit-next, 它意味着你在重试前需要等待的时间
+X-ratelimit-limit is the rate control interval of the current interface. The specific parameters are different due to different interfaces
+If you've been limited by the rate, you'll receive a 403 response, along with an extra header x-ratelimit-next, which means the amount of time you need to wait before retrying
  
-
 
 
 ## <span id="open-apisecret">Create API Key </span>
 
 ### Create an API Key
-用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
-官网地址: www.ix.com
-备用地址: www.ixex.io
+The API access to users is obtained in the personal Center -> My API of the website. Click to apply for API, where API key is the access key provided by IX to API users, and API secret is the private key used to sign the request parameters.
+Official website: www.ix.com
+Standby domain website: www.ixex.io
 
-**_注意： 请勿向任何人泄露这两个参数，这两个参数关乎您账号的安全。_**    
+**_Note: do not disclose these two parameters to anyone. These two parameters are related to the security of your account._**
 
-### 请求认证
-在调用 API 时，需要提供 API Key 作为每个请求的身份识别，并且通过secret对请求数据加签
+###  Request authentication 
+When request the API, you need to provide the API key as the identity of each request, and sign the request data through secret
 
-#### 公共参数
+#### Public Parameters
 
-字段名 | 字段释义 | 字段类型 | 是否必填 | 默认值 | 参数类型 | 说明
+Field name |  Field definition  | Field type | Is it necessary | default | parameter type | description
  :-: | :-: | :-: | :-: | :-: | :-: | :-: 
-key | 在平台申请的API_KEY |  string | 是 | 无 | http header | 用于身份识别
-sign | 签名信息 |  string | 是 | 无 |  http header |按照一定规则形成的签名信息
-version| api版本| string | 是 | 2.0 | http header | 用于区分api版本
-nonce | 请求发起时的时间戳,单位:秒 | string | 是 | 无 |  http body | nonce不早/晚于当前系统时间10秒
+key | Create API_KEY on the platform |  string | yes | nothing | http header |  For identification 
+sign | Signature information |  string | yes | nothing |  http header | Signature information formed according to certain rules
+version| api version| string | yes | 2.0 | http header | Used to differentiate API versions 
+nonce |  Timestamp when the request is initiated, in seconds  | string | yes | nothing |  http body | nonce no earlier / later than current system time 10 seconds
 
 
- #### 如何进行签名
- 1. 将对应业务的接口参数和除sign外的公共参数以http GET请求形式拼接, 如下
+ ####  How to sign 
+ 1. The interface parameters of the corresponding business and the public parameters except sign are spliced in the form of HTTP get request, as follows
  
  ``` php
 $post_data = 'leverage=100&symbol=BTCUSD&nonce=1542434791';
 
  ```
  
- 2. 对拼接后的字符串进行加签
+ 2. Sign the spliced string 
  ``` php
 $secret = 't7T0YlFnYXk0Fx3JswQsDrViLg1Gh3DUU5Mr';
 $sign = hash('sha256', $post_data.$secret)
  // sign = 670e3e4aa32b243f2dedf1dafcec2fd17a440e71b05681550416507de591d908
  ```
  
- 3.header附加上key和sign参数，发送http请求
- 
+ 3. Attach the key and sign parameters to the header to send the HTTP request 
  ```http
  POST /order/active HTTP/1.1
  Content-Type: application/x-www-form-urlencoded
@@ -178,186 +176,188 @@ $.ajax({
 |60047	            |	Too many orders in the trading cycle|
 |60048	            |	Failed to get current price|
 
-## <span id="open-apitradelist">币币交易API列表 </span>
+## <span id="open-apitradelist">Spot Trading List API </span>
 
-## <span id="open-apitradelist-symbollist">获取所有交易对的详情 POST /symbol/list</span>
-- 参数
-  - nonce 时间戳
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-symbollist">Get Trading All Pairs List POST /symbol/list</span>
+- Parameters
+  - nonce Timestamps
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(id/name/product/price_scale/amount_scale/min_amount/max_amount/min_total/max_total/make_rate/take_rate/state)
   - message
-- 字段说明
-  - id ID 
-  - name 交易对名称 
-  - product 商品 
-  - currency 货币 
-  - price_scale 报价小数位 
-  - amount_scale 报量小数位 
-  - min_amount 最小下单量 
-  - max_amount 最大下单量 
-  - min_total 最小下单额 
-  - max_total 最大下单额 
-  - make_rate 挂单手续费率 
-  - take_rate 吃单手续费率 
-  - state 状态 1上线 2下线
-- 示例
+- Field Description
+  - id  Unique number ID 
+  - name Contract name, transaction pair of BTC 
+  - product Product 
+  - currency Currency 
+  - price_scale Price accuracy 
+  - amount_scale Quantity accuracy 
+  - min_amount Min amount 
+  - max_amount Max amount 
+  - min_total Min order amount 
+  - max_total Max order amount 
+  - make_rate make order fee rate 
+  - take_rate take order fee rate 
+  - state status 1:online 2:offline
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/symbol/list -d 'nonce=1536826456'
 ```
 
-## <span id="open-apitradelist-balancelist">获取余额列表 POST /balance/list</span>
-- 参数
-  - nonce 时间戳
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-balancelist">Available Balance Of User POST /balance/list</span>
+- parameters
+  - nonce Timestamps
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(user_id/currency/available/ordering/withdrawing/quota/max_quota/rates)
   - message
-- 字段说明
-  - user_id 用户ID 
-  - currency 货币 
-  - available 可用量 
-  - ordering 委托锁定量 
-  - withdrawing 提币锁定量 
-  - quota 当前额度 
-  - max_quota 最大额度 
-  - rates 币种对各法币汇率 
-- 示例
+- Field Description
+  - user_id User ID 
+  - currency Currency 
+  - available Available quantity 
+  - ordering  Entrusted lock quantity  
+  - withdrawing  Locked amount of withdrawal 
+  - quota Current quota 
+  - max_quota Max quota 
+  - rates Rates 
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/balance/list -d 'nonce=1536826456'
 ```
 
-## <span id="open-apitradelist-ordercreate">下单 POST /order/create</span>
-- 参数
-  - nonce 时间戳
-  - symbol 交易对名称
-  - side 1买 2卖
-  - type 1限价 2市价
-  - price 限价单时报价，市价填0
-  - amount 限价单时报量，市价买单填0
-  - locked 市价买时的锁定额，市价买单必填
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-ordercreate">Place Order POST /order/create</span>
+- Parameters
+  - nonce Timestamps
+  - symbol Trading pairs
+  - side 1:buy 2:sell
+  - type 1:limited price 2:market price
+  - price Price limit quotation ,market price:0
+  - amount Price limit quotation amount, market price amount:0
+  - locked Locked amount at market price , Market price is required 
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(id/user_id/symbol/side/type/price/amount/locked)
   - message
-- 字段说明
-  - id 订单ID 
-  - user_id 用户ID 
-  - symbol 交易对名称 
-  - side 1买 2卖 
-  - type 1限价 2市价
-  - price 限价单时报价
-  - amount 限价单时报量
-  - locked 市价买时的锁定额
-- 示例
+- Field Description
+  - id Order ID 
+  - user_id User ID 
+  - symbol Trading pairs 
+  - side 1:buy 2:sell
+  - type 1:limited price 2:market price
+  - price  Price limit quotation 
+  - amount Price limit quotation amount
+  - locked Locked amount at market price 
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/create -d 'nonce=1536826456&symbol=BTC_USDT&side=1&type=1&price=6000&amount=1'
 ```
 
-## <span id="open-apitradelist-orderremove">撤单 POST /order/remove</span>
-- 参数
-  - nonce 时间戳
-  - symbol 交易对名称
-  - order_id 订单ID
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-orderremove">Cancel Order POST /order/remove</span>
+- Parameters
+  - nonce Timestamps
+  - symbol Trading pairs
+  - order_id Order ID
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 示例
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/remove -d 'nonce=1536826456&symbol=BTC_USDT&order_id=123'
 ```
 
-## <span id="open-apitradelist-orderactive">查询委托 POST /order/active</span>
-- 参数
-  - nonce 时间戳
-  - symbol 交易对名称
-  - page 页码
-  - size 每页数量
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-orderactive">Before One Of Limit Order POST /order/active</span>
+- Parameters
+  - nonce Timestamps
+  - symbol Trading pairs 
+  - page Pagination
+  - size Number of per page
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(id/user_id/symbol/product/currency/side/type/price/amount/locked/executed/total/fee/state/create_time/update_time)
   - message
-- 字段说明
-  - id 订单ID 
-  - user_id 用户ID 
-  - symbol 交易对名称 
-  - product 商品 
-  - currency 货币 
-  - side 1买 2卖 
-  - type 1限价 2市价
-  - price 报价
-  - amount 报量
-  - locked 锁定量
-  - executed 成交量
-  - total 成交额
-  - fee 手续费
-  - state 1未成交 2部分成交
-  - create_time 下单时间
-  - update_time 最近成交时间
-- 示例
+- Field Description
+  - id Order ID 
+  - user_id User ID 
+  - symbol Trading pairs 
+  - product Product 
+  - currency Currency 
+  - side 1:buy 2:sell 
+  - type 1:limited price 2:market price
+  - price Offer price
+  - amount Offer quantity
+  - locked Locked quantity
+  - executed Filled quantity
+  - total Filled total
+  - fee 手fee
+  - state 1:Open 2:partially filled
+  - create_time Time of order creation
+  - update_time Time of filled
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/active -d 'nonce=1536826456&symbol=BTC_USDT&page=1&size=10'
 ```
 
-## <span id="open-apitradelist-orderhistory">历史订单 POST /order/history</span>
-- 参数
-  - nonce 时间戳
-  - page 页码
-  - size 每页数量
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+## <span id="open-apitradelist-orderhistory">History Of Order POST /order/history</span>
+- Parameters
+  - nonce Timestamps
+  - page Pagination
+  - size Number of per page
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(id/user_id/symbol/product/currency/side/type/price/amount/locked/executed/total/fee/state/create_time/update_time)
   - message
-- 示例
-- 字段说明
-  - id 订单ID 
-  - user_id 用户ID 
-  - symbol 交易对名称 
-  - product 商品 
-  - currency 货币 
-  - side 1买 2卖 
-  - type 1限价 2市价
-  - price 报价
-  - amount 报量
-  - locked 锁定量
-  - executed 成交量
-  - total 成交额
-  - fee 手续费
-  - state 3全部成交 4未成交撤单 5部分成交撤单 6未成交系统取消 7部分成交系统取消
-  - create_time 下单时间
-  - update_time 最近成交时间
+- Field Description
+  - id Order ID 
+  - user_id User ID 
+  - symbol Trading pairs 
+  - product Product 
+  - currency Currency 
+  - side 1buy 2sell 
+  - type 1Limited price 2 Market price
+  - price Offer price
+  - amount Offer amount
+  - locked Locked quantity
+  - executed Filled quantity
+  - total Filled total
+  - fee fee
+  - state 3Filled 4 Unsettled cancellation  5 Partial transaction cancellation  6 Cancellation of non transaction system  7 Cancellation of partial transaction system 
+  - create_time Time of order creation
+  - update_time Time of filled
 ```
+- Example
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/history -d 'nonce=1536826456&page=1&size=10'
 ```
 
-### <span id="open-apitradelist-orderquery">查询活跃委托订单详情 POST /order/query</span>
-- 参数
-  - nonce 时间戳
-  - symbol 交易对名称
-  - order_id 订单ID
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+### <span id="open-apitradelist-orderquery">Query Actived Detail Of Limit Order POST /order/query</span>
+- Parameters
+  - nonce Timestamps
+  - symbol Trading pairs 
+  - order_id Order ID
+- Response
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data(id/user_id/symbol/product/currency/side/type/price/amount/locked/executed/total/fee/state/create_time/update_time)
   - message
-- 示例
-- 字段说明
-  - id 订单ID 
-  - user_id 用户ID 
-  - symbol 交易对名称 
-  - product 商品 
-  - currency 货币 
-  - side 1买 2卖 
-  - type 1限价 2市价
-  - price 报价
-  - amount 报量
-  - locked 锁定量
-  - executed 成交量
-  - total 成交额
-  - fee 手续费
-  - state 1未成交 2部分成交
-  - create_time 下单时间
-  - update_time 最近成交时间
+- Field Description
+  - id Order ID 
+  - user_id User ID 
+  - symbol Trading pairs 
+  - product Product 
+  - currency Currency 
+  - side 1buy 2sell 
+  - type 1Limited price 2 Market price
+  - price Offer price
+  - amount Offer amount
+  - locked Locked quantity
+  - executed Filled amount
+  - total Filled total
+  - fee fee
+  - state 1Open  2partially filled
+  - create_time Time of order creation
+  - update_time Time of filled
 ```
+- Example
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/order/query -d 'nonce=1536826456&symbol=BTC_USDT&order_id=123'
 ```

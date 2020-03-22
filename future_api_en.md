@@ -184,11 +184,11 @@ $.ajax({
 - parameters
   - nonce Timestamps
 - Response 
-- code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
 - Field Description
-  - id  Unique number 
+  - id  Unique number ID 
   - name Contract name, transaction pair of BTC ，example BTC Perpetual Swap Positions
   - currency  Trading unit USD settlement 
   - product BTC contact

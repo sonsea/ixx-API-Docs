@@ -13,80 +13,80 @@
 * [Status Code](#open-apistatuscode)
 
 * [Mix Trading List API](#open-apimixlist)
-  * [获取交易对列表](#open-apimixlist-mixsymbollist)
-  * [用户余额(持仓)](#open-apimixlist-mixaccountbalancelist)
-  * [修改保证金](#open-apimixlist-mixaccounttransfermargin)
-  * [下单](#open-apimixlist-mixorder)
-  * [撤单](#open-apimixlist-mixremove)
-  * [一键撤单](#open-apimixlist-mixremoveall)
-  * [平仓](#open-apimixlist-mixclose)
-  * [当前委托](#open-apimixlist-mixactiveorders)
-  * [委托历史](#open-apimixlist-mixorderhistory)
-  * [已成交](#open-apimixlist-mixaccountorderfills)
+  * [Get Trading All Pairs List](#open-apimixlist-mixsymbollist)
+  * [Available Balance Of User](#open-apimixlist-mixaccountbalancelist)
+  * [Change Margin During Trading](#open-apimixlist-mixaccounttransfermargin)
+  * [Place Order](#open-apimixlist-mixorder)
+  * [Cancel Order](#open-apimixlist-mixremove)
+  * [Batch Cancel Orders](#open-apimixlist-mixremoveall)
+  * [Closing](#open-apimixlist-mixclose)
+  * [Before One Of Limit Order](#open-apimixlist-mixactiveorders)
+  * [History Of Limit Order](#open-apimixlist-mixorderhistory)
+  * [Order Of Filled](#open-apimixlist-mixaccountorderfills)
 
 -----------
 
 ## <span id="open-api">API Summary </span>
 
-- 所有交易API请求都使用HTTP POST
-- 交易API需要在官网申请API需要的key/secret
-- 请求的header里添加version = '2.0'
-- 请求的header里添加key/sign，sign=hash('sha256', $post_data.$secret)
-- 请求的nonce参数为当前系统时间戳，单位为秒，nonce不早/晚于当前系统时间10秒
-- 访问频率最快为100ms间隔
-- 访问ixx站点的币对时,需要在请求的header里添加from = 'ixx'
+- All trading API request use HTTP POST 
+- All trading API need key/secret, you can create the key/secret with IXX Official website
+- Add version = '2.0' in the requested header
+- Add key/sign in the requested header，the sign calculation method : sign=hash('sha256', $post_data.$secret)
+- The parameter of nonce in the requested is current system time, Bar size in seconds, No earlier / no later than 10 seconds of the current system 
+- The fastest access frequency is 100ms interval
+- You must add from = 'ixx' in the requested header when you visit the currency pairs of IXX site
 
 ## <span id="open-apisecret">Limited Control </span>  
-我们对API的请求频率进行控制，具体频率参数请参考接口详情
+We control the API request rate limitts, Please refer to the interface details for specific frequency parameters.
 
-对 API 的请求，以下标头将被返回︰
+For requests to the API, the following headers will be returned:
 ```
 "X-ratelimit-limit: 1000"
 "X-ratelimit-next: 500"
 ```
-X-ratelimit-limit为当前接口的频率控制间隔,具体因接口不同而参数不同
-如果你已经被频率限制，你将收到 403 响应, 以及一个额外的标头X-ratelimit-next, 它意味着你在重试前需要等待的时间
+X-ratelimit-limit is the rate control interval of the current interface. The specific parameters are different due to different interfaces
+If you've been limited by the rate, you'll receive a 403 response, along with an extra header x-ratelimit-next, which means the amount of time you need to wait before retrying
  
+
 
 ## <span id="open-apisecret">Create API Key </span>
 
 ### Create an API Key
-用户的API权限在网站的个人中心->我的API内获取。点击申请API即可获得，其中API Key是IX提供给API用户的访问密钥，API Secret是用于对请求参数签名的私钥。
-官网地址: www.ix.com
-备用地址: www.ixex.io
+The API access to users is obtained in the personal Center -> My API of the website. Click to apply for API, where API key is the access key provided by IX to API users, and API secret is the private key used to sign the request parameters.
+Official website: www.ix.com
+Standby domain website: www.ixex.io
 
-**_注意： 请勿向任何人泄露这两个参数，这两个参数关乎您账号的安全。_**    
+**_Note: do not disclose these two parameters to anyone. These two parameters are related to the security of your account._**
 
-### 请求认证
-在调用 API 时，需要提供 API Key 作为每个请求的身份识别，并且通过secret对请求数据加签
+###  Request authentication 
+When request the API, you need to provide the API key as the identity of each request, and sign the request data through secret
 
-#### 公共参数
+#### Public Parameters
 
-字段名 | 字段释义 | 字段类型 | 是否必填 | 默认值 | 参数类型 | 说明
+Field name |  Field definition  | Field type | Is it necessary | default | parameter type | description
  :-: | :-: | :-: | :-: | :-: | :-: | :-: 
-key | 在平台申请的API_KEY |  string | 是 | 无 | http header | 用于身份识别
-sign | 签名信息 |  string | 是 | 无 |  http header |按照一定规则形成的签名信息
-version| api版本| string | 是 | 2.0 | http header | 用于区分api版本
-nonce | 请求发起时的时间戳,单位:秒 | string | 是 | 无 |  http body | nonce不早/晚于当前系统时间10秒
+key | Create API_KEY on the platform |  string | yes | nothing | http header |  For identification 
+sign | Signature information |  string | yes | nothing |  http header | Signature information formed according to certain rules
+version| api version| string | yes | 2.0 | http header | Used to differentiate API versions 
+nonce |  Timestamp when the request is initiated, in seconds  | string | yes | nothing |  http body | nonce no earlier / later than current system time 10 seconds
 
 
- #### 如何进行签名
- 1. 将对应业务的接口参数和除sign外的公共参数以http GET请求形式拼接, 如下
+ ####  How to sign 
+ 1. The interface parameters of the corresponding business and the public parameters except sign are spliced in the form of HTTP get request, as follows
  
  ``` php
 $post_data = 'leverage=100&symbol=BTCUSD&nonce=1542434791';
 
  ```
  
- 2. 对拼接后的字符串进行加签
+ 2. Sign the spliced string 
  ``` php
 $secret = 't7T0YlFnYXk0Fx3JswQsDrViLg1Gh3DUU5Mr';
 $sign = hash('sha256', $post_data.$secret)
  // sign = 670e3e4aa32b243f2dedf1dafcec2fd17a440e71b05681550416507de591d908
  ```
  
- 3.header附加上key和sign参数，发送http请求
- 
+ 3. Attach the key and sign parameters to the header to send the HTTP request 
  ```http
  POST /order/active HTTP/1.1
  Content-Type: application/x-www-form-urlencoded
@@ -175,7 +175,7 @@ $.ajax({
 
 ## <span id="open-apimixlist">Mix Trading List API </span>
 
-### <span id="open-apimixlist-mixsymbollist">获取交易对列表 POST /mix/symbol/list</span>
+### <span id="open-apimixlist-mixsymbollist">Get Trading All Pairs List POST /mix/symbol/list</span>
 - 参数
  - site 站点 1:ix,2:ixx
 - 返回值
@@ -214,7 +214,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 ```
 
 	
-### <span id="open-apimixlist-mixaccountbalancelist">用户余额(持仓) POST /mix/account/balance/list</span>
+### <span id="open-apimixlist-mixaccountbalancelist">Available Balance Of User POST /mix/account/balance/list</span>
 - 参数
   - user_id 用户id
 - 返回值
@@ -253,7 +253,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/balance/list -d 'nonce=1536826456'
 ```
 	
-### <span id="open-apimixlist-mixaccounttransfermargin">修改保证金 POST /mix/account/transfer_margin</span>
+### <span id="open-apimixlist-mixaccounttransfermargin">Change Margin During Trading POST /mix/account/transfer_margin</span>
 - 参数
   - user_id 用户id
   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
@@ -271,7 +271,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 ```
 
 ## 订单相关
-### <span id="open-apimixlist-mixorder">下单 POST /mix/order</span>
+### <span id="open-apimixlist-mixorder">Place Order POST /mix/order</span>
 - 参数
   - user_id
   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
@@ -299,7 +299,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/order -d 'nonce=1536826456'
 ```
 
-### <span id="open-apimixlist-mixremove">撤单 POST /mix/remove</span>
+### <span id="open-apimixlist-mixremove">Cancel Order POST /mix/remove</span>
 - 参数
   - user_id
   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT) 
@@ -315,7 +315,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove -d 'nonce=1536826456&name=BTCUSDT&order_id=1'
 ```
 
-### <span id="open-apimixlist-mixremoveall">一键撤单 POST /mix/remove_all</span>
+### <span id="open-apimixlist-mixremoveall">Batch Cancel Orders POST /mix/remove_all</span>
 - 参数
   - user_id
   - trigger 0活动委托 1止损委托
@@ -330,7 +330,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove_all -d 'nonce=1536826456&trigger=1'
 ```
 
-### <span id="open-apimixlist-mixclose">平仓 POST /mix/close</span>
+### <span id="open-apimixlist-mixclose">Closing POST /mix/close</span>
 - 参数
   - user_id
   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
@@ -347,7 +347,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/close -d 'nonce=1536826456&name=BTCUSDT&side=1&price=13.00'
 ```
 
-### <span id="open-apimixlist-mixactiveorders">当前委托 POST /mix/activeorders</span>
+### <span id="open-apimixlist-mixactiveorders">Before One Of Limit Order POST /mix/activeorders</span>
 - 参数
   - user_id
   - page
@@ -377,7 +377,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/activeorders -d 'nonce=1536826456&page=1&size=10'
 ```
 
-### <span id="open-apimixlist-mixorderhistory">委托历史 POST /mix/orderhistory</span>
+### <span id="open-apimixlist-mixorderhistory">History Of Limit Order POST /mix/orderhistory</span>
 - 参数
   - user_id
   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)（非必传）默认全部
@@ -403,7 +403,7 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/orderhistory -d 'nonce=1536826456&name=BTCUSDT&page=1&size=10'
 ```
 
-### <span id="open-apimixlist-mixaccountorderfills">已成交 POST /mix/account/orderfills</span>
+### <span id="open-apimixlist-mixaccountorderfills">Order Of Filled POST /mix/account/orderfills</span>
 - 参数
   - user_id
   - page
