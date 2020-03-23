@@ -9,19 +9,19 @@ IX API为用户提供了一套简单而强大的开发工具，帮助用户将�
 主域名: api.ix.com 备用域名: api.ixex.io
 </p>
 
-## 合约交易API
+## BTC合约交易API
 [future_api.md](./future_api.md)
 <p>
 主域名: api.ix.com 备用域名: api.ixex.io
 </p>
 
-## 币本位交易API
+## 币本位合约交易API
 [unit_api.md](./unit_api.md)
 <p>
 主域名: api.ix.com 备用域名: api.ixex.io
 </p>
 
-## 金本位交易API
+## 金本位合约交易API
 [mix_api.md](./mix_api.md)
 <p>
 主域名: api.ix.com 备用域名: api.ixex.io

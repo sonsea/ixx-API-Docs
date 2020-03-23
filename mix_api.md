@@ -1,6 +1,6 @@
 ### [English](./mix_api_en.md)
 
-# 金本位交易API
+# 金本位合约交易API
 
 * [概述](#open-api)
 
