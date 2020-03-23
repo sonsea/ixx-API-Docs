@@ -1,6 +1,6 @@
 ### [English](./future_api_en.md)
 
-# 合约交易API
+# BTC合约交易API
 
 * [概述](#open-api)
 
