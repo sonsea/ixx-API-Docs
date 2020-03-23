@@ -1,4 +1,4 @@
-### [中文](./trade_api.md)
+### [币币交易API](./trade_api.md)
 
 # Spot Trading API
 

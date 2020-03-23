@@ -1,4 +1,4 @@
-### [中文](./mix_api.md)
+### [金本位合约交易API](./mix_api.md)
 
 # Mix Trading API
 
@@ -176,259 +176,270 @@ $.ajax({
 ## <span id="open-apimixlist">Mix Trading List API </span>
 
 ### <span id="open-apimixlist-mixsymbollist">Get Trading All Pairs List POST /mix/symbol/list</span>
-- 参数
- - site 站点 1:ix,2:ixx
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- parameters
+ - site Site 1:ix,2:ixx
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-  - id 唯一编号
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT),永续合约接口里传的currency参数和symbol参数都改成这个合约名name做为参数
-  - symbol 交易对名字 例:MIX_ETH
+- Field Description
+  - id Unique ID
+  - name Contract name(BTCUSDT,EHTUSDT,EOSUSDT),The parameters currency and symbol of Perpetual Swap Positions API is change the paramter name of this contract interface
+  - symbol Trading pairs for example:MIX_ETH
   - product MIX
-  - currency 币种(BTC,ETH,EOS)
-  - amount_scale 数量精度
-  - price_scale 价格精度
-  - min_amount 最小下单数量
-  - max_amount 最大下单数量
-  - im 基础 IM
-  - mm 基础 MM
-  - make_rate maker费率
-  - take_rate taker费率
-  - state 1可用 0不可用
-  - site 站点 1:ix,2:ixx
-  - multiplier 之前的乘数 现在用来表示单张合约价值
-    - value_scale 价值精度
-    - max_total 最大下单价值
-    - min_total 最小下单价值
-    - base_risk 基数风险限额
-    - gap_risk 风险限额递增值
-    - max_risk 最大风险额度
-    - max_leverage 最大杠杆
-    - leverages 所用杠杆
-- 限定访问间隔时间
-	-	1000毫秒
+  - currency Currency(BTC,ETH,EOS)
+  - amount_scale Quantity accuracy
+  - price_scale Price accuracy
+  - min_amount Min order amount
+  - max_amount Max order amount
+  - im Basic IM
+  - mm Basic MM
+  - make_rate Maker rate
+  - take_rate Taker rate
+  - state State 1:available 0:unavailable
+  - site Site 1:ix,2:ixx
+  - multiplier Multiplier, Now it is used to express the value of a single contract 
+    - value_scale Value accuracy
+    - max_total Max order values 
+    - min_total Min order values
+    - base_risk Base risk
+    - gap_risk Incremental risk
+    - max_risk Max risk
+    - max_leverage Max leverage
+    - leverages leverages
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/symbol/list -d 'nonce=1536826456'
 ```
 
 	
 ### <span id="open-apimixlist-mixaccountbalancelist">Available Balance Of User POST /mix/account/balance/list</span>
-- 参数
-  - user_id 用户id
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- parameters
+  - user_id User ID
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-  - user_id 用户id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-  - available 资产净值(总余额)
-  - available_balance 可用余额
-  - currency 币种(ETH,EOS)
-  - rate 汇率
-  - side 1做多 2做空
-  - holding 目前仓位数量
-  - price 开仓价格
-  - leverage 杠杆倍数
-  - margin_user 用户设置的仓位保证金
-  - margin_position 仓位保证金
-  - margin_delegation 委托保证金
-  - unrealized 未实现盈亏
-  - realized 已实现盈亏
-  - risk_limit 风险限额
-  - liq_price 强平价格
-  - mark_price 标记价格
-  - adl ADL值
-  - future_close_id 平仓委托ID
-  - close_position_price 平仓委托价格
-  - future_tp_id 止盈委托ID
-  - future_sl_id 止损委托ID
-  - tp_price 止盈委托价格
-  - sl_price 止损委托价格
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+  - user_id User ID
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - available Net asset value
+  - available_balance Available
+  - currency Currency(ETH,EOS)
+  - rate Rate 
+  - side Side 1:long 2:short
+  - holding Number of current positions
+  - price Opening price
+  - leverage leverage
+  - margin_user User set position margin
+  - margin_position Margin position
+  - margin_delegation Margin delegation
+  - unrealized Unrealized profit and loss
+  - realized Realized profit and loss
+  - risk_limit Rish limit
+  - liq_price Liquidation price
+  - mark_price Mark price
+  - adl ADL valuse
+  - future_close_id Closed trigger ID
+  - close_position_price Closed trigger price
+  - future_tp_id Stop profit trigger ID
+  - future_sl_id Stop loss trigger ID
+  - tp_price Stop profit trigger price
+  - sl_price Stop loss trigger price
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/balance/list -d 'nonce=1536826456'
 ```
 	
 ### <span id="open-apimixlist-mixaccounttransfermargin">Change Margin During Trading POST /mix/account/transfer_margin</span>
-- 参数
-  - user_id 用户id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-  - side 1做多 2做空
-  - amount 增加或减少数量
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
-  - data 详见 /mix/account/balance/list
+- parameters
+  - user_id User ID
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - side Side 1:long 2:short
+  - amount Increase or decrease in amount
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
+  - data See of details /mix/account/balance/list
   - message
-- 字段说明
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/transfer_margin -d 'nonce=1536826456&name=BTCUSDT&side=1&amount=1'
 ```
 
-## 订单相关
+## Order
 ### <span id="open-apimixlist-mixorder">Place Order POST /mix/order</span>
-- 参数
+- Parameters
   - user_id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-  - currency 币种(USDT,BTC,ETH,EOS)
-  - side 订单类型 1开多(买入开多) 2开空(卖出开空) 3平多(卖出平多) 4平空(买入平空)
-  - amount 数量必须大于0
-  - price 价格必须大于0
-  - type 下单类型 1 限价 2市价 3止盈止损
-  - passive 是否被动委托 0否 1是
-  - trigger_price 触发价格
-  - trigger_type 触发类型 0默认 1盘口价格 2标记价格 3指数价格
-  - tp_type 止盈触发类型 0默认 1盘口价格 2标记价格 3指数价格 如果是-1的话代表从仓位里下的触发单
-  - tp_price 止盈价格
-  - sl_type 止损触发类型 0默认 1盘口价格 2标记价格 3指数价格 如果是-1的话代表从仓位里下的触发单
-  - sl_price 止损价格
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - currency Currecny(USDT,BTC,ETH,EOS)
+  - side Order type 1: open long 2: open short 3: close long 4: close short
+  - amount Amount
+  - price Price
+  - type 1:Limited price 2:Market price 3:limit price stop loss  
+  - passive  Passive entrustment or not (0:no 1:yes)
+  - trigger_price Trigger price
+  - trigger_type Trigger type 0:default 1:Offer price 2:Mark price 3:Index price
+  - trigger_close Actual forced-liquidation trigger price 0:no checked 1:checked
+  - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price (If it is - 1, it means the trigger list from the whole warehouse)
+  - tp_price Stop profit price
+  - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price (If it is - 1, it means the trigger list from the whole warehouse)
+  - sl_price Stop loss price
   
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/order -d 'nonce=1536826456'
 ```
 
 ### <span id="open-apimixlist-mixremove">Cancel Order POST /mix/remove</span>
-- 参数
+- Parameters
   - user_id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT) 
-  - order_id 订单id 
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT) 
+  - order_id Order ID 
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-- 限定访问间隔时间
-	-	100毫秒
+- Field Description
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove -d 'nonce=1536826456&name=BTCUSDT&order_id=1'
 ```
 
 ### <span id="open-apimixlist-mixremoveall">Batch Cancel Orders POST /mix/remove_all</span>
-- 参数
+- Parameters
   - user_id
-  - trigger 0活动委托 1止损委托
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+  - trigger 0:Activity limited 1:Limited to loss
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-- 限定访问间隔时间
-	-	5000毫秒
+- Field Description
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/remove_all -d 'nonce=1536826456&trigger=1'
 ```
 
 ### <span id="open-apimixlist-mixclose">Closing POST /mix/close</span>
-- 参数
+- Parameters
   - user_id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-  - side 1做多 2做空
-  - price 平仓价格
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - side Side 1:long 2:short
+  - price Closed position price
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/close -d 'nonce=1536826456&name=BTCUSDT&side=1&price=13.00'
 ```
 
 ### <span id="open-apimixlist-mixactiveorders">Before One Of Limit Order POST /mix/activeorders</span>
-- 参数
+- parameters
   - user_id
   - page
   - size
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-  - 订单id
-    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-    - currency 币种(USDT,BTC,ETH,EOS)
-    - amount 数量
-    - price 委托价格
-    - total 已成交额
-    - executed 已成交量
-    - state 状态 1委托中未成交 2委托中部分成交
-    - create_time 下单时间
-    - update_time 更新时间
-    - tp_type 止盈触发类型 0默认 1盘口价格 2标记价格 3指数价格
-    - tp_price 止盈价格
-    - sl_type 止损触发类型 0默认 1盘口价格 2标记价格 3指数价格
-    - sl_price 止损价格
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+  - id Order ID
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - currency Currency(USDT,BTC,ETH,EOS)
+  - amount Amount
+  - price Trigger price
+  - total Traded total
+  - executed Traded amount
+  - state Status 1 No transaction in commission  2 Partial transaction in commission 
+  - create_time Time of order creation
+  - update_time Time of filled
+  - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price
+  - tp_price Stop profit price
+  - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price 
+  - sl_price Stop loss price
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/activeorders -d 'nonce=1536826456&page=1&size=10'
 ```
 
 ### <span id="open-apimixlist-mixorderhistory">History Of Limit Order POST /mix/orderhistory</span>
-- 参数
+- Parameters
   - user_id
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)（非必传）默认全部
+  - name Trading pairs(EHTUSD,EOSUSD)（Closed position price）default all
   - page
   - size
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-  - 订单id
-    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-    - amount 数量(张)
-    - price 委托价格
-    - total 已成交额
-    - executed 已成交量(张)
-    - state 状态 1:委托中未成交, 2:委托中限价部分成交, 3:完全成交, 4:撤单全部, 5:撤单部分成交, 6:市价部分成交, 7:市价部分成交盘口全被吃空
-    - create_time 下单时间
-    - update_time 更新时间
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+    - id Order ID
+ 	- name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+    - amount Amount
+    - price Limited price
+    - total Traded quantity 
+    - executed Quantity of order filled
+    - state Status 1 No transaction in commission  2 Partial transaction in commission 3:Fully Filled, 4:Canceled, 5:Cancel Filled, 6: Part of the transaction at market price , 7: Part of the market price was sold out 
+    - create_time Time of order creation
+    - update_time Time of filled
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/orderhistory -d 'nonce=1536826456&name=BTCUSDT&page=1&size=10'
 ```
 
 ### <span id="open-apimixlist-mixaccountorderfills">Order Of Filled POST /mix/account/orderfills</span>
-- 参数
+- Parameters
   - user_id
   - page
   - size
-- 返回值
-  - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+- Response 
+  - code(200 indicates normal reading of data content, and non 200 indicates failure to read message failure message)
   - data
   - message
-- 字段说明
-  - id 成交单ID
-  - origin 1成交单,2强平单,3资金费率,4ADL减仓
-  - order_id 订单ID
-  - uid 用户ID
-  - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-  - side 方向 1开多(买入开多) 2开空(卖出开空) 3平多(卖出平多) 4平空(买入平空)
-  - type 1限价 2市价 3止盈止损
-  - price 成交价
-  - amount 成交量
-  - amount_total 委托数量
-  - amount_last 成交量
-  - total 成交额
-  - fee 手续费
-  - create_time 成交时间
-- 限定访问间隔时间
-	-	1000毫秒
+- Field Description
+  - id Filled ID
+  - origin 1:Filled orders,2:Closed orders,3:Capital rate,4:AD partial liquidationL
+  - order_id Order ID
+  - uid User ID
+  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+  - side Side 1: open long 2: open short 3: close long 4: close short
+  - type 1:Limited price 2:Market price 3:stop profit and loss 
+  - price Traded price
+  - amount Traded amount
+  - amount_total Authorized amount
+  - amount_last Last traded amount 
+  - total Traded total
+  - fee Fee
+  - create_time Time of order creation
+- Limited access interval 
+  -	1000 milliseconds
+- Example
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/orderfills -d 'nonce=1536826456&page=1&size=10'
 ```

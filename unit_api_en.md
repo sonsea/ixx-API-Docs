@@ -1,4 +1,4 @@
-### [中文](./unit_api.md)
+### [币本位合约交易API](./unit_api.md)
 
 # Unit Trading API
 
@@ -359,19 +359,19 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - Field Description
-    - id Order ID
-  	- name Trading pairs name(EHTUSD,EOSUSD)
-    - amount Amount
-    - price Trigger price
-    - total Traded total
-    - executed Traded amount
-    - state Status 1 No transaction in commission  2 Partial transaction in commission 
-    - create_time Time of order creation
-    - update_time Time of filled
-    - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price
-    - tp_price Stop profit price
-    - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price 
-    - sl_price Stop loss price
+  - id Order ID
+  - name Trading pairs name(EHTUSD,EOSUSD)
+  - amount Amount
+  - price Trigger price
+  - total Traded total
+  - executed Traded amount
+  - state Status 1 No transaction in commission  2 Partial transaction in commission 
+  - create_time Time of order creation
+  - update_time Time of filled
+  - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price
+  - tp_price Stop profit price
+  - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price 
+  - sl_price Stop loss price
 - Limited access interval 
   -	1000 milliseconds
 - Example
