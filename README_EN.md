@@ -2,7 +2,7 @@
 
 
 ## API Summary
-IX offers powerful APIs for you to integrate into your applications.
+IXX offers powerful APIs for you to integrate into your applications.
 
 ## Spot Trading API
 [trade_api_en.md](./trade_api_en.md)
