@@ -365,20 +365,24 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - Field Description
-  - id Order ID
-  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
-  - currency Currency(USDT,BTC,ETH,EOS)
-  - amount Amount
-  - price Trigger price
-  - total Traded total
-  - executed Traded amount
-  - state Status 1 No transaction in commission  2 Partial transaction in commission 
-  - create_time Time of order creation
-  - update_time Time of filled
-  - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price
-  - tp_price Stop profit price
-  - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price 
-  - sl_price Stop loss price
+  - page 
+  - size
+  - total
+  - data
+    - id Order ID
+    - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+    - currency Currency(USDT,BTC,ETH,EOS)
+    - amount Amount
+    - price Trigger price
+    - total Traded total
+    - executed Traded amount
+    - state Status 1 No transaction in commission  2 Partial transaction in commission 
+    - create_time Time of order creation
+    - update_time Time of filled
+    - tp_type Interference stop trigger type  0:default 1:Mark price 2:Offer price 3:index price
+    - tp_price Stop profit price
+    - sl_type Stop loss trigger price 0:default 1:Mark price 2:Offer price 3:index price 
+    - sl_price Stop loss price
 - Limited access interval 
   -	1000 milliseconds
 - Example
@@ -397,6 +401,10 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - Field Description
+  - page 
+  - size
+  - total
+  - data
     - id Order ID
  	- name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
     - amount Amount
@@ -423,20 +431,24 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - Field Description
-  - id Filled ID
-  - origin 1:Filled orders,2:Closed orders,3:Capital rate,4:AD partial liquidationL
-  - order_id Order ID
-  - uid User ID
-  - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
-  - side Side 1: open long 2: open short 3: close long 4: close short
-  - type 1:Limited price 2:Market price 3:stop profit and loss 
-  - price Traded price
-  - amount Traded amount
-  - amount_total Authorized amount
-  - amount_last Last traded amount 
-  - total Traded total
-  - fee Fee
-  - create_time Time of order creation
+  - page 
+  - size
+  - total
+  - data
+    - id Filled ID
+    - origin 1:Filled orders,2:Closed orders,3:Capital rate,4:AD partial liquidationL
+    - order_id Order ID
+    - uid User ID
+    - name Trading pairs name(BTCUSDT,EHTUSDT,EOSUSDT)
+    - side Side 1: open long 2: open short 3: close long 4: close short
+    - type 1:Limited price 2:Market price 3:stop profit and loss 
+    - price Traded price
+    - amount Traded amount
+    - amount_total Authorized amount
+    - amount_last Last traded amount 
+    - total Traded total
+    - fee Fee
+    - create_time Time of order creation
 - Limited access interval 
   -	1000 milliseconds
 - Example

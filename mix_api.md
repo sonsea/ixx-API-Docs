@@ -347,7 +347,11 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - 字段说明
-  - 订单id
+  - page 
+  - size
+  - total
+  - data
+    - 订单id
     - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
     - currency 币种(USDT,BTC,ETH,EOS)
     - amount 数量
@@ -378,7 +382,11 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - data
   - message
 - 字段说明
-  - 订单id
+  - page 
+  - size
+  - total
+  - data
+    - 订单id
     - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
     - amount 数量(张)
     - price 委托价格
