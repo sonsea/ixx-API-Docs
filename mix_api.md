@@ -407,20 +407,20 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
   - size
   - total
   - data
-   - id 成交单ID
-   - origin 1成交单,2强平单,3资金费率,4ADL减仓
-   - order_id 订单ID
-   - uid 用户ID
-   - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
-   - side 方向 1开多(买入开多) 2开空(卖出开空) 3平多(卖出平多) 4平空(买入平空)
-   - type 1限价 2市价 3止盈止损
-   - price 成交价
-   - amount 成交量
-   - amount_total 委托数量
-   - amount_last 成交量
-   - total 成交额
-   - fee 手续费
-   - create_time 成交时间
+    - id 成交单ID
+    - origin 1成交单,2强平单,3资金费率,4ADL减仓
+    - order_id 订单ID
+    - uid 用户ID
+    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
+    - side 方向 1开多(买入开多) 2开空(卖出开空) 3平多(卖出平多) 4平空(买入平空)
+    - type 1限价 2市价 3止盈止损
+    - price 成交价
+    - amount 成交量
+    - amount_total 委托数量
+    - amount_last 成交量
+    - total 成交额
+    - fee 手续费
+    - create_time 成交时间
 - 限定访问间隔时间
 	-	1000毫秒
 ```
