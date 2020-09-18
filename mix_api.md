@@ -23,6 +23,8 @@
   * [当前委托](#open-apimixlist-mixactiveorders)
   * [委托历史](#open-apimixlist-mixorderhistory)
   * [已成交](#open-apimixlist-mixaccountorderfills)
+  * [设置杠杆倍数](#mix-account-leverage)
+  * [设置杠杆倍数(预览)](#mix-account-leverage_preview)
 
 -----------
 
@@ -433,4 +435,40 @@ curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/
 	-	1000毫秒
 ```
 curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/orderfills -d 'nonce=1536826456&page=1&size=10'
+```
+
+### <span id="mix-account-leverage">设置杠杆倍数 POST /mix/account/leverage</span>
+- 参数
+    - user_id
+    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
+    - leverage 杠杆倍数
+- 返回值
+    - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+    - data 详见 /mix/account/balance/list
+    - message
+- 限定访问间隔时间
+    -  1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/leverage -d 'nonce=1536826456&user_id=1&name=BTCUSDT&leverage=3'
+```
+
+### <span id="mix-account-leverage_preview">设置杠杆倍数(预览) POST /mix/account/leverage_preview</span>
+- 参数
+    - user_id
+    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
+    - leverage 杠杆倍数
+- 返回值
+    - code(200表示正常读取data内容，非200则表示失败读取message失败信息)
+    - data
+    - message
+- 字段说明
+    - name 合约名(BTCUSDT,EHTUSDT,EOSUSDT)
+    - side 1做多 2做空
+    - margin_delegation 委托保证金
+    - margin_position 仓位保证金
+    - leverage 杠杆倍数
+- 限定访问间隔时间
+    -  1000毫秒
+```
+curl -H 'key: xxx' -H 'sign: yyy' -H 'version: 2.0' -X POST https://api.ixex.io/mix/account/orderfills -d 'nonce=1536826456&user_id=1&name=BTCUSDT&leverage=3'
 ```
